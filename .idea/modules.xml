@@ -2,7 +2,24 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/analyzer.iml" filepath="$PROJECT_DIR$/.idea/modules/analyzer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/analyzer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/analyzer-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api.iml" filepath="$PROJECT_DIR$/.idea/modules/api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-build.iml" filepath="$PROJECT_DIR$/.idea/modules/api-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bildapi.iml" filepath="$PROJECT_DIR$/.idea/modules/bildapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bildapi-build.iml" filepath="$PROJECT_DIR$/.idea/modules/bildapi-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/commons.iml" filepath="$PROJECT_DIR$/.idea/modules/commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/commons-build.iml" filepath="$PROJECT_DIR$/.idea/modules/commons-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crawler.iml" filepath="$PROJECT_DIR$/.idea/modules/crawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crawler-build.iml" filepath="$PROJECT_DIR$/.idea/modules/crawler-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/decoder.iml" filepath="$PROJECT_DIR$/.idea/modules/decoder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/decoder-build.iml" filepath="$PROJECT_DIR$/.idea/modules/decoder-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/filter.iml" filepath="$PROJECT_DIR$/.idea/modules/filter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/filter-build.iml" filepath="$PROJECT_DIR$/.idea/modules/filter-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/storer.iml" filepath="$PROJECT_DIR$/.idea/modules/storer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/storer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/storer-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/visualizer.iml" filepath="$PROJECT_DIR$/.idea/modules/visualizer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/visualizer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/visualizer-build.iml" />
     </modules>
   </component>
 </project>
