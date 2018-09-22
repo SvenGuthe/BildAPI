@@ -13,9 +13,15 @@ lazy val commonSettings = Seq(
 
 // Multi-Project
 
+lazy val global = project
+  .in(file("."))
+
 lazy val commons = project
   .settings(
     commonSettings: _*
+  )
+  .dependsOn(
+    global
   )
 
 lazy val analyzer = project
@@ -73,6 +79,14 @@ lazy val visualizer = project
   .settings(
     commonSettings: _*
   )
+
+// Dependencies
+
+libraryDependencies ++= Seq(
+  Dependencies.typesafe,
+  Dependencies.scalaTest,
+  Dependencies.scalactic,
+)
 
 
 // Resolvers
