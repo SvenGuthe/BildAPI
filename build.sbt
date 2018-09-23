@@ -24,6 +24,30 @@ lazy val commons = project
     global
   )
 
+lazy val trigger = project
+  .dependsOn(
+    commons
+  )
+  .settings(
+    commonSettings: _*
+  )
+
+lazy val urlcrawler = project
+  .dependsOn(
+    commons
+  )
+  .settings(
+    commonSettings: _*
+  )
+
+lazy val cleaner = project
+  .dependsOn(
+    commons
+  )
+  .settings(
+    commonSettings: _*
+  )
+
 lazy val analyzer = project
   .dependsOn(
     commons
