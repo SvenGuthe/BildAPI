@@ -24,6 +24,14 @@ lazy val commons = project
     global
   )
 
+lazy val redis_interface = project
+  .settings(
+    commonSettings: _*
+  )
+  .dependsOn(
+    global
+  )
+
 lazy val trigger = project
   .dependsOn(
     commons
@@ -34,7 +42,8 @@ lazy val trigger = project
 
 lazy val urlcrawler = project
   .dependsOn(
-    commons
+    commons,
+    redis_interface
   )
   .settings(
     commonSettings: _*
@@ -110,6 +119,8 @@ libraryDependencies ++= Seq(
   Dependencies.typesafe,
   Dependencies.scalaTest,
   Dependencies.scalactic,
+  Dependencies.slf4jApi,
+  Dependencies.slf4jSimple,
 )
 
 

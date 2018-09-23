@@ -15,19 +15,29 @@ object Dependencies {
   lazy val scalaTest = "org.scalatest" %% "scalatest" % versions.scalaTest
   lazy val scalactic = "org.scalactic" %% "scalactic" % versions.scalactic
 
+  // Logging
+  lazy val slf4jApi = "org.slf4j" % "slf4j-api" % versions.slf4j
+  lazy val slf4jSimple = "org.slf4j" % "slf4j-simple" % versions.slf4j
+
+  // Redis
+  lazy val redis = "net.debasishg" %% "redisclient" % versions.redis
 
   // Spark
 
   lazy val versions = new {
-    lazy val scala = "2.12.6"
-    lazy val build = "0.1"
-    lazy val typesafe = "1.3.2"
-    lazy val akkaActor = "2.5.16"
-    lazy val akkaStream = "2.5.16"
-    lazy val akkaHttp = "10.1.5"
-    lazy val akkaCluster = "2.5.16"
-    lazy val scalaTest = "3.0.5"
-    lazy val scalactic = "3.0.5"
+    val scala = "2.12.6"
+    val build = "0.1"
+    val typesafe = "1.3.2"
+    val akkaActor = "2.5.16"
+    val akkaStream = "2.5.16"
+    val akkaHttp = "10.1.5"
+    val akkaCluster = "2.5.16"
+    val scalaTest = "3.0.5"
+    val scalactic = "3.0.5"
+    val typesafeLogging = "3.9.0"
+    val logback = "1.2.3"
+    val slf4j = "1.7.5"
+    val redis = "3.8"
   }
 
 }

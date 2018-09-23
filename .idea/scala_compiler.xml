@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="sbt 1" modules="bildapi,root,decoder,trigger,api,commons,urlcrawler,global,storer,cleaner,analyzer,filter,visualizer,crawler" />
+    <profile name="sbt 1" modules="bildapi,root,crawler,commons,trigger,analyzer,storer,decoder,filter,visualizer,api,redis_interface,cleaner,urlcrawler,global" />
   </component>
 </project>
