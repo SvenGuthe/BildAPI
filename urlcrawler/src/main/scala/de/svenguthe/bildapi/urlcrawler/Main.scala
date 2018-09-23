@@ -11,14 +11,10 @@ object Main extends App {
   val logger = LoggerFactory.getLogger(this.getClass)
 
   val conf = ConfigFactory.load()
-  val startpage = conf.getString("urls.politics.startpage")
 
   logger.info(s"===============================")
   logger.info(s"===== Starting URLCrawler =====")
   logger.info(s"===============================")
-
-  logger.info(s"  Configuration")
-  logger.info(s"    Startpage: $startpage")
 
   // Initialize ActorSystem
   val actorSystem = ActorSystem("crawlerActorSystem")
@@ -30,6 +26,6 @@ object Main extends App {
       0 milliseconds,
       10 seconds,
     urlFetcherActor,
-      "Test")
+      "initalizeFetching")
 
 }
