@@ -1,4 +1,5 @@
 libraryDependencies ++= Seq(
   Dependencies.akkaActor,
-  Dependencies.akkaCluster
+  Dependencies.akkaCluster,
+  Dependencies.scalaScraper
 )

@@ -24,7 +24,7 @@ object Main extends App {
 
   val schedule = actorSystem.scheduler.schedule(
       0 milliseconds,
-      10 seconds,
+      10 minutes,
     urlFetcherActor,
       "initalizeFetching")
 

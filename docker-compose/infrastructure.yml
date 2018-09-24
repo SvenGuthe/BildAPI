@@ -11,6 +11,16 @@ services:
     volumes:
       - redis-data:/data
 
+  redis-gui:
+    image: marian/rebrow
+    hostname: redis-gui
+    ports:
+      - "5001:5001"
+    networks:
+      - redis-net
+    depends_on:
+      - redis
+
 networks:
   redis-net:
 

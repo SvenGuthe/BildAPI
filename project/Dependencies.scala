@@ -22,6 +22,9 @@ object Dependencies {
   // Redis
   lazy val redis = "net.debasishg" %% "redisclient" % versions.redis
 
+  // HTML Parser
+  lazy val scalaScraper = "net.ruippeixotog" %% "scala-scraper" % versions.scalaScraper
+
   // Spark
 
   lazy val versions = new {
@@ -38,6 +41,7 @@ object Dependencies {
     val logback = "1.2.3"
     val slf4j = "1.7.5"
     val redis = "3.8"
+    val scalaScraper = "2.1.0"
   }
 
 }
