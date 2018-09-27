@@ -25,6 +25,9 @@ object Dependencies {
   // HTML Parser
   lazy val scalaScraper = "net.ruippeixotog" %% "scala-scraper" % versions.scalaScraper
 
+  // Datetime
+  lazy val joda = "joda-time" % "joda-time" % versions.joda
+
   // Spark
 
   lazy val versions = new {
@@ -42,6 +45,7 @@ object Dependencies {
     val slf4j = "1.7.5"
     val redis = "3.8"
     val scalaScraper = "2.1.0"
+    val joda = "2.10"
   }
 
 }

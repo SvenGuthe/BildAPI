@@ -15,6 +15,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.12.6:jar" level="project" />
+    <orderEntry type="library" name="sbt: joda-time:joda-time:2.10:jar" level="project" />
     <orderEntry type="library" name="sbt: org.slf4j:slf4j-simple:1.7.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.slf4j:slf4j-api:1.7.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scalactic:scalactic_2.12:3.0.5:jar" level="project" />

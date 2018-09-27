@@ -15,6 +15,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commons" exported="" />
+    <orderEntry type="library" name="sbt: joda-time:joda-time:2.10:jar" level="project" />
     <orderEntry type="library" name="sbt: xml-apis:xml-apis:1.4.01:jar" level="project" />
     <orderEntry type="library" name="sbt: xerces:xercesImpl:2.11.0:jar" level="project" />
     <orderEntry type="library" name="sbt: xalan:xalan:2.7.2:jar" level="project" />
@@ -41,7 +42,6 @@
     <orderEntry type="library" name="sbt: net.sourceforge.htmlunit:htmlunit:2.29:jar" level="project" />
     <orderEntry type="library" name="sbt: net.sourceforge.cssparser:cssparser:0.9.24:jar" level="project" />
     <orderEntry type="library" name="sbt: net.ruippeixotog:scala-scraper_2.12:2.1.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: joda-time:joda-time:2.9.9:jar" level="project" />
     <orderEntry type="library" name="sbt: commons-net:commons-net:3.6:jar" level="project" />
     <orderEntry type="library" name="sbt: commons-logging:commons-logging:1.2:jar" level="project" />
     <orderEntry type="library" name="sbt: commons-io:commons-io:2.6:jar" level="project" />

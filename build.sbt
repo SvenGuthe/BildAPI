@@ -51,7 +51,8 @@ lazy val urlcrawler = project
 
 lazy val cleaner = project
   .dependsOn(
-    commons
+    commons,
+    redis_interface
   )
   .settings(
     commonSettings: _*

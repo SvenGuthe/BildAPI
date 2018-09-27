@@ -1,23 +1,26 @@
 package de.svenguthe.bildapi.urlcrawler
 
-import java.util.Calendar
+import java.util.Date
 
 import akka.actor.{Actor, Props}
 import com.redis.RedisClient
 import com.typesafe.config.ConfigFactory
 import de.svenguthe.bildapi.redisinterface.RedisService
+import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
+
+import scala.collection.mutable.HashMap
 
 class URLFetcher extends Actor {
 
-  private val logger = LoggerFactory.getLogger(this.getClass)
+  private lazy val logger = LoggerFactory.getLogger(this.getClass)
 
   private val crawler = context.actorOf(Props[Crawler], "Crawler")
-  private val calendar = Calendar.getInstance()
 
-  private val conf = ConfigFactory.load()
+  private lazy val conf = ConfigFactory.load()
 
   lazy val redisConnection = RedisService.getRedisConnection
+  lazy val urlHashMap = HashMap[String, Date]()
 
   def receive = {
     case msg: String =>
@@ -27,14 +30,15 @@ class URLFetcher extends Actor {
         case wrongIdentifier =>
           logger.error(s"URLFetcher received message with wrong identifier String: $wrongIdentifier")
       }
-    case (msg : String, url : String) =>
+    case (msg : String, url : String, date: Date) =>
       msg match {
         case "publishURL" =>
-          redisConnection.get(url) match {
+          urlHashMap.get(url) match {
             case Some(_) =>
+              logger.info(s"Key allready existing")
             case None =>
               logger.info(s"Set key $url")
-              redisConnection.set(url, Calendar.getInstance().getTime)
+              redisConnection.set(url, date)
           }
         case "failure" =>
           logger.info(s"Delete key $url")
@@ -54,7 +58,8 @@ class URLFetcher extends Actor {
       case Some(map) =>
         map.foreach(
           url => {
-            crawler ! (url.getOrElse(""), calendar.getTime)
+            urlHashMap.put(url.getOrElse(""), DateTime.now().toDate)
+            crawler ! (url.getOrElse(""), DateTime.now().toDate)
           }
         )
       case None =>
