@@ -12,10 +12,9 @@ import org.slf4j.LoggerFactory
 import scala.collection.mutable.HashMap
 
 /**
-  * Fetches all the URLs from Redis and send them to the [[Crawler]]-Actor
+  * Fetches all the URLs from Redis and send them to the [[URLCrawler]]-Actor
   */
-class
-URLFetcher extends Actor {
+class URLFetcher extends Actor {
 
   /**
     * Factories to load the logger and the typesafe-configuration
@@ -23,13 +22,13 @@ URLFetcher extends Actor {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val crawlerConfig = conf.getString("akka.actors.crawler")
+  private lazy val crawlerConfig = conf.getString("akka.actors.urlCrawler")
 
 
   /**
-    * Define the [[Crawler]]-Actor
+    * Define the [[URLCrawler]]-Actor
     */
-  private lazy val crawler = context.actorOf(Props[Crawler], crawlerConfig)
+  private lazy val crawler = context.actorOf(Props[URLCrawler], crawlerConfig)
 
   /**
     * Establish a redis database connection at the first time it is called
@@ -67,7 +66,7 @@ URLFetcher extends Actor {
   }
 
   def redisURLToCrawler(redisConnection : RedisClient): Unit ={
-    val keyValue = redisConnection.keys("*")
+    val keyValue = RedisService.getAllKeysFromRedis(redisConnection)
     logger.debug(s"All keys: ${keyValue.mkString(", ")}")
 
     keyValue match {

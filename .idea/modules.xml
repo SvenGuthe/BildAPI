@@ -22,7 +22,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/redis_interface-build.iml" filepath="$PROJECT_DIR$/.idea/modules/redis_interface-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/storer.iml" filepath="$PROJECT_DIR$/.idea/modules/storer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/storer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/storer-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trigger-build.iml" filepath="$PROJECT_DIR$/.idea/modules/trigger-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/urlcrawler.iml" filepath="$PROJECT_DIR$/.idea/modules/urlcrawler.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/urlcrawler-build.iml" filepath="$PROJECT_DIR$/.idea/modules/urlcrawler-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/visualizer.iml" filepath="$PROJECT_DIR$/.idea/modules/visualizer.iml" />

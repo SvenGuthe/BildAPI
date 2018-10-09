@@ -29,6 +29,11 @@ object RedisService {
     redisConnection
   }
 
+  def getAllKeysFromRedis(redisClient : RedisClient,
+                          keys : String = "*") : Option[List[Option[String]]] = {
+    redisClient.keys(keys)
+  }
+
 }
 
 class RedisService() {

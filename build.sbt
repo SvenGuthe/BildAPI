@@ -68,7 +68,8 @@ lazy val api = project
 
 lazy val crawler = project
   .dependsOn(
-    commons
+    commons,
+    redis_interface
   )
   .settings(
     commonSettings: _*

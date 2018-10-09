@@ -11,7 +11,7 @@ import org.joda.time.{DateTime, Days}
 import org.slf4j.LoggerFactory
 
 /** Object which provide functions to crawl a website */
-object CrawlerService {
+object URLCrawlerService {
 
 
   /**
@@ -23,7 +23,7 @@ object CrawlerService {
   private lazy val politicsPre = conf.getString("urls.politics.pre")
   private lazy val bildPre = conf.getString("urls.bild.pre")
 
-  /** Creates a person with a given name and birthdate
+  /** Get all links from an website and send all the articles with pubdate < 7 days ago back to the sender
     *
     *  @param links All links/<a>-Elements which are found in a website
     *  @param sender the actor which sends the request [[URLFetcher]]
@@ -63,7 +63,7 @@ object CrawlerService {
               /**
                 * If the Publishing date is more then 7 days ago, we don't fetch the url
                 */
-              if (Days.daysBetween(Formatter.formatStringToDateTimeCrawler(pubdate).withTimeAtStartOfDay(), DateTime.now().withTimeAtStartOfDay()).getDays() < 7) {
+              if (Days.daysBetween(Formatter.formatStringToDateTimeCrawler(pubdate).withTimeAtStartOfDay, DateTime.now.withTimeAtStartOfDay).getDays < 7) {
                 logger.info(s"Publish Page $url with PubTime $jodatime")
                 sender ! ("publishURL", url, jodatime)
               } else {
@@ -72,7 +72,7 @@ object CrawlerService {
 
             } else {
               logger.info(s"Found Page $url with no PubTime")
-              val jodatime = DateTime.now().plusYears(10).toDate
+              val jodatime = new DateTime(9999, 1, 1, 0, 0, 0, 0).toDate
               val links = doc >> "a"
               sender ! ("publishURL", url, jodatime)
             }
