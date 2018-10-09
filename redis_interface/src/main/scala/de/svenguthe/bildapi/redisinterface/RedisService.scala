@@ -15,6 +15,18 @@ object RedisService {
   private val redisPort = conf.getInt("redis.port")
   private val startpage = conf.getString("urls.politics.startpage")
 
+  def getRedisServiceInstance(): RedisService = {
+    RedisService()
+  }
+
+}
+
+case class RedisService() {
+
+  private val logger = LoggerFactory.getLogger(this.getClass)
+
+  private val startpage = RedisService.conf.getString("urls.politics.startpage")
+
   def getRedisConnection() : RedisClient = {
     val redisService = new RedisService()
     val redisConnection = redisService.connectToRedis()
@@ -28,12 +40,6 @@ object RedisService {
 
     redisConnection
   }
-
-}
-
-class RedisService() {
-
-  private val logger = LoggerFactory.getLogger(this.getClass)
 
   def connectToRedis() : RedisClient = {
     connectToRedis(RedisService.redisHost, RedisService.redisPort)

@@ -49,7 +49,7 @@ object CrawlerService {
 
             } else {
               logger.info(s"Found Page $url with no PubTime")
-              val jodatime = DateTime.now().toDate
+              val jodatime = DateTime.now().plusYears(10).toDate
               val links = doc >> "a"
               sender ! ("publishURL", url, jodatime)
             }

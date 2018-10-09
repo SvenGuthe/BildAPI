@@ -19,8 +19,10 @@ class URLFetcher extends Actor {
 
   private lazy val conf = ConfigFactory.load()
 
-  lazy val redisConnection = RedisService.getRedisConnection
-  lazy val urlHashMap = HashMap[String, Date]()
+  private lazy val redisInstance = RedisService.getRedisServiceInstance()
+  private lazy val redisConnection = redisInstance.getRedisConnection()
+
+  private lazy val urlHashMap = HashMap[String, Date]()
 
   def receive = {
     case msg: String =>
@@ -52,7 +54,7 @@ class URLFetcher extends Actor {
 
   def redisURLToCrawler(redisConnection : RedisClient): Unit ={
     val keyValue = redisConnection.keys("*")
-    logger.info(s"All keys: ${keyValue.mkString(", ")}")
+    logger.debug(s"All keys: ${keyValue.mkString(", ")}")
 
     keyValue match {
       case Some(map) =>
