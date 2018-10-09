@@ -34,8 +34,7 @@ URLFetcher extends Actor {
   /**
     * Establish a redis database connection at the first time it is called
     */
-  private lazy val redisInstance = RedisService.getRedisServiceInstance()
-  private lazy val redisConnection = redisInstance.getRedisConnection()
+  private lazy val redisConnection = RedisService.getRedisConnection()
 
   private lazy val urlHashMap = HashMap[String, Date]()
 

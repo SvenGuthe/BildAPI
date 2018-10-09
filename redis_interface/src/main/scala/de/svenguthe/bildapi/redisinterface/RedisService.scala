@@ -9,33 +9,31 @@ import org.slf4j.LoggerFactory
 object RedisService {
 
   private val logger = LoggerFactory.getLogger(this.getClass)
-  private val conf = ConfigFactory.load()
 
+  private val conf = ConfigFactory.load()
   private val redisHost = conf.getString("redis.host")
   private val redisPort = conf.getInt("redis.port")
   private val startpage = conf.getString("urls.politics.startpage")
-
-  def getRedisServiceInstance(): RedisService = RedisService()
-
-}
-
-case class RedisService() {
-
-  private val logger = LoggerFactory.getLogger(this.getClass)
 
   def getRedisConnection() : RedisClient = {
     val redisService = new RedisService()
     val redisConnection = redisService.connectToRedis()
 
-    redisConnection.get[String](RedisService.startpage.toString) match {
-      case Some(exists) => logger.info(s"Redis allready initialized: ${RedisService.startpage.toString} - $exists")
+    redisConnection.get[String](startpage.toString) match {
+      case Some(exists) => logger.info(s"Redis allready initialized: ${startpage.toString} - $exists")
       case _ =>
         logger.info("Initialize Redis")
-        redisConnection.set(RedisService.startpage.toString, Calendar.getInstance.getTime)
+        redisConnection.set(startpage.toString, Calendar.getInstance.getTime)
     }
 
     redisConnection
   }
+
+}
+
+class RedisService() {
+
+  private val logger = LoggerFactory.getLogger(this.getClass)
 
   def connectToRedis() : RedisClient = {
     connectToRedis(RedisService.redisHost, RedisService.redisPort)

@@ -29,8 +29,8 @@ class OutdatedURLFetcher extends Actor {
   /**
     * Establish a redis database connection at the first time it is called
     */
-  private lazy val redisInstance = RedisService.getRedisServiceInstance()
-  private lazy val redisConnection = redisInstance.getRedisConnection
+  private lazy val redisConnection = RedisService.getRedisConnection()
+
 
   /** When Receiving new Messages from other actors like [[Main]]
     *
