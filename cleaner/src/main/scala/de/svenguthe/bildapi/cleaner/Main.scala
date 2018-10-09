@@ -31,7 +31,7 @@ object Main extends App {
   import actorSystem.dispatcher
 
   /**
-    * Crete a Scheduler which triggers the OutdatedURLFetcher every day
+    * Crete a Scheduler which triggers the [[OutdatedURLFetcher]] every day
     */
   val schedule = actorSystem.scheduler.schedule(
     0 milliseconds,

@@ -72,12 +72,12 @@ class OutdatedURLFetcher extends Actor {
         map.foreach(
           url => {
             val pubDate = redisConnection.get[String](url.getOrElse("")).getOrElse("")
-            val pubDateJoda = Formatter.formatStringToDateTime(pubDate).toLocalDate
+            val pubDateJoda = Formatter.formatStringToDateTime(pubDate).withTimeAtStartOfDay()
 
             /**
               * If the pubDate is more than 7 days ago, the URL/Key will be send to the [[Cleaner]]-Actor
               */
-            if(Days.daysBetween(pubDateJoda, DateTime.now().toLocalDate).getDays > 7)
+            if(Days.daysBetween(pubDateJoda, DateTime.now().withTimeAtStartOfDay()).getDays > 7)
               cleaner ! url.getOrElse("")
 
           }

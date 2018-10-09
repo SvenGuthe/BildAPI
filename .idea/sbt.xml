@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaSbtSettings">
-    <option name="customVMPath" />
     <option name="linkedExternalProjectsSettings">
       <SbtProjectSettings>
-        <option name="externalProjectPath" value="D:\BildAPI" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/analyzer" />
+            <option value="$PROJECT_DIR$/analyzer/project" />
+            <option value="$PROJECT_DIR$/api" />
+            <option value="$PROJECT_DIR$/api/project" />
+            <option value="$PROJECT_DIR$/cleaner" />
+            <option value="$PROJECT_DIR$/cleaner/project" />
+            <option value="$PROJECT_DIR$/commons" />
+            <option value="$PROJECT_DIR$/commons/project" />
+            <option value="$PROJECT_DIR$/crawler" />
+            <option value="$PROJECT_DIR$/crawler/project" />
+            <option value="$PROJECT_DIR$/decoder" />
+            <option value="$PROJECT_DIR$/decoder/project" />
+            <option value="$PROJECT_DIR$/filter" />
+            <option value="$PROJECT_DIR$/filter/project" />
+            <option value="$PROJECT_DIR$/project" />
+            <option value="$PROJECT_DIR$/redis_interface" />
+            <option value="$PROJECT_DIR$/redis_interface/project" />
+            <option value="$PROJECT_DIR$/storer" />
+            <option value="$PROJECT_DIR$/storer/project" />
+            <option value="$PROJECT_DIR$/trigger" />
+            <option value="$PROJECT_DIR$/trigger/project" />
+            <option value="$PROJECT_DIR$/urlcrawler" />
+            <option value="$PROJECT_DIR$/urlcrawler/project" />
+            <option value="$PROJECT_DIR$/visualizer" />
+            <option value="$PROJECT_DIR$/visualizer/project" />
+          </set>
+        </option>
+        <option name="resolveSbtClassifiers" value="true" />
+        <option name="sbtVersion" value="1.2.3" />
+        <option name="useSbtShell" value="true" />
       </SbtProjectSettings>
     </option>
   </component>

@@ -12,7 +12,7 @@ class Crawler extends Actor {
   override def receive: Receive = {
     case (url : String, timestamp : Date) =>
       logger.info(s"Crawler received Message - URL: $url, Timestamp: $timestamp")
-      CrawlerService.getLinks(url, context.sender)
+      CrawlerService.extractLinksFromURLandSendtoURLFetcher(url, context.sender)
     case wrongFormat =>
       logger.error(s"Crawler received Message in wrong format: $wrongFormat")
   }

@@ -11,20 +11,34 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.HashMap
 
+/**
+  * Fetches all the URLs from Redis and send them to the [[Crawler]]-Actor
+  */
 class URLFetcher extends Actor {
 
+  /**
+    * Factories to load the logger and the typesafe-configuration
+    */
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
-
-  private val crawler = context.actorOf(Props[Crawler], "Crawler")
-
   private lazy val conf = ConfigFactory.load()
 
+  private lazy val crawlerConfig = conf.getString("akka.actors.crawler")
+
+
+  /**
+    * Define the [[Crawler]]-Actor
+    */
+  private lazy val crawler = context.actorOf(Props[Crawler], crawlerConfig)
+
+  /**
+    * Establish a redis database connection at the first time it is called
+    */
   private lazy val redisInstance = RedisService.getRedisServiceInstance()
   private lazy val redisConnection = redisInstance.getRedisConnection()
 
   private lazy val urlHashMap = HashMap[String, Date]()
 
-  def receive = {
+  override def receive: Receive = {
     case msg: String =>
       msg match {
         case "initalizeFetching" =>
