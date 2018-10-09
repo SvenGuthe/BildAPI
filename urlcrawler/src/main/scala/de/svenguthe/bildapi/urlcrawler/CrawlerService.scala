@@ -20,6 +20,9 @@ object CrawlerService {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
+  private lazy val politicsPre = conf.getString("urls.politics.pre")
+  private lazy val bildPre = conf.getString("urls.bild.pre")
+
   /** Creates a person with a given name and birthdate
     *
     *  @param links All links/<a>-Elements which are found in a website
@@ -39,9 +42,9 @@ object CrawlerService {
           /**
             * Check if the href attribute is a link from the politics section
             */
-          if (href.startsWith(conf.getString("urls.politics.pre"))) {
+          if (href.startsWith(politicsPre)) {
 
-            val url = s"${conf.getString("urls.bild.pre")}$href"
+            val url = s"$bildPre$href"
 
             /**
               * Read also the fetched Page for checking the publishing Date

@@ -14,7 +14,8 @@ import scala.collection.mutable.HashMap
 /**
   * Fetches all the URLs from Redis and send them to the [[Crawler]]-Actor
   */
-class URLFetcher extends Actor {
+class
+URLFetcher extends Actor {
 
   /**
     * Factories to load the logger and the typesafe-configuration
