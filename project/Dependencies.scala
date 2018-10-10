@@ -10,6 +10,7 @@ object Dependencies {
   lazy val akkaStream = "com.typesafe.akka" %% "akka-stream" % versions.akkaStream
   lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % versions.akkaHttp
   lazy val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % versions.akkaCluster
+  lazy val akkaRemote = "com.typesafe.akka" %% "akka-remote" % versions.akkaRemote
 
   // Scala Test
   lazy val scalaTest = "org.scalatest" %% "scalatest" % versions.scalaTest
@@ -38,6 +39,7 @@ object Dependencies {
     val akkaStream = "2.5.16"
     val akkaHttp = "10.1.5"
     val akkaCluster = "2.5.16"
+    val akkaRemote = "2.5.16"
     val scalaTest = "3.0.5"
     val scalactic = "3.0.5"
     val typesafeLogging = "3.9.0"

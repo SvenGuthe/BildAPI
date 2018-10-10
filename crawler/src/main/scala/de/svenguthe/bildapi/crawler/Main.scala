@@ -1,3 +1,5 @@
+package de.svenguthe.bildapi.crawler
+
 import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import org.slf4j.LoggerFactory
@@ -12,8 +14,10 @@ object Main extends App {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val confActorSystem = conf.getString("akka.akkaSystem")
-  private lazy val crawlerConfig = conf.getString("akka.actors.crawler")
+  private lazy val confActorSystem = conf.getString("crawlerSystem.akka.systemName")
+  private lazy val crawlerConfig = conf.getString("crawlerSystem.akka.actor.actors.crawler")
+  private lazy val crawlerSystem  = conf.getConfig("crawlerSystem")
+
 
   logger.info(s"===============================")
   logger.info(s"======= Starting Crawler ======")
@@ -22,7 +26,7 @@ object Main extends App {
   /**
     * Initialize the Actor System and define the [[Crawler]]
     */
-  val actorSystem = ActorSystem(confActorSystem)
+  val actorSystem = ActorSystem(confActorSystem, crawlerSystem)
   val urlFetcherActor = actorSystem.actorOf(Props[Crawler], crawlerConfig)
 
   import actorSystem.dispatcher

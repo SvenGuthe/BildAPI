@@ -1,3 +1,5 @@
+package de.svenguthe.bildapi.crawler
+
 import akka.actor.{Actor, Props}
 import com.typesafe.config.ConfigFactory
 import de.svenguthe.bildapi.commons.Formatter
@@ -12,7 +14,7 @@ class Crawler extends Actor {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val downloaderConfig = conf.getString("akka.actors.downloader")
+  private lazy val downloaderConfig = conf.getString("crawlerSystem.akka.actor.actors.downloader")
 
   /**
     * Define the [[Downloader]]-Actor
