@@ -1,9 +1,8 @@
 package de.svenguthe.bildapi.redisinterface
 
-import java.util.Calendar
-
 import com.redis.RedisClient
 import com.typesafe.config.ConfigFactory
+import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 
 object RedisService {
@@ -23,7 +22,7 @@ object RedisService {
       case Some(exists) => logger.info(s"Redis allready initialized: ${startpage.toString} - $exists")
       case _ =>
         logger.info("Initialize Redis")
-        redisConnection.set(startpage.toString, Calendar.getInstance.getTime)
+        redisConnection.set(startpage.toString, new DateTime(9999, 1, 1, 0, 0, 0, 0).toDate)
     }
 
     redisConnection

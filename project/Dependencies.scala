@@ -29,6 +29,9 @@ object Dependencies {
   // Datetime
   lazy val joda = "joda-time" % "joda-time" % versions.joda
 
+  // Spray JSON
+  lazy val sprayJson = "io.spray" %%  "spray-json" % versions.sprayJson
+
   // Spark
 
   lazy val versions = new {
@@ -48,6 +51,7 @@ object Dependencies {
     val redis = "3.8"
     val scalaScraper = "2.1.0"
     val joda = "2.10"
+    val sprayJson = "1.3.4"
   }
 
 }

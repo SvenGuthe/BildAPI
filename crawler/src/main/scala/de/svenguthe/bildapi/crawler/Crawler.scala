@@ -6,20 +6,28 @@ import de.svenguthe.bildapi.commons.Formatter
 import de.svenguthe.bildapi.redisinterface.RedisService
 import org.slf4j.LoggerFactory
 
-class Crawler extends Actor {
+object Crawler {
 
   /**
-    * Factories to load the logger and the typesafe-configuration
+    * Factories to load the typesafe-configuration
     */
-  private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
   private lazy val downloaderConfig = conf.getString("crawlerSystem.akka.actor.actors.downloader")
 
+}
+
+class Crawler extends Actor {
+
+  /**
+    * Factories to load the logger
+    */
+  private lazy val logger = LoggerFactory.getLogger(this.getClass)
+
   /**
     * Define the [[Downloader]]-Actor
     */
-  private lazy val downloader = context.actorOf(Props[Downloader], downloaderConfig)
+  private lazy val downloader = context.actorOf(Props[Downloader], Crawler.downloaderConfig)
 
   /**
     * Establish a redis database connection at the first time it is called
@@ -44,7 +52,7 @@ class Crawler extends Actor {
               } else{
                 val urlString = url.get
                 logger.info(s"Crawl Article at $urlString")
-                downloader ! ("downloadHTMLfromURL", urlString)
+                downloader ! ("downloadHTMLfromURL", urlString, pubDateJoda)
               }
 
             })

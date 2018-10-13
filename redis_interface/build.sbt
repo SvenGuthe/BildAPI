@@ -1,3 +1,4 @@
 libraryDependencies ++= Seq(
-  Dependencies.redis
+  Dependencies.redis,
+  Dependencies.joda
 )
