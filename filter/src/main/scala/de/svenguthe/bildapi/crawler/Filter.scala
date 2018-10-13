@@ -1,11 +1,10 @@
 package de.svenguthe.bildapi.crawler
 
-import akka.actor.Actor
+import akka.actor.{Actor, Props}
 import de.svenguthe.bildapi.commons.datatypes.BildArticle
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
-import net.ruippeixotog.scalascraper.dsl.DSL.Parse._
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 
@@ -15,9 +14,10 @@ import spray.json._
 class Filter extends Actor {
 
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
+  private lazy val crawler = context.actorOf(Props[KafkaProducerActor], "KafkaProducerActor")
 
   override def receive: Receive = {
-    case (message: String, url: String, document: String, pubDate: DateTime) =>
+    case (message: String, url: String, document: String, pubDate: DateTime, crawlerTime : DateTime) =>
       message match {
         case "Document" =>
           logger.info("Get HTML Document as String")
@@ -26,28 +26,35 @@ class Filter extends Actor {
           try {
             val documentAsDoc = browser.parseString(document)
 
+            /**
+              * Searching for the kicker, headline subhead and the raw text in the HTML document
+              */
             val bildArticle_kicker = documentAsDoc >> element("article header h1 .kicker") >> text
             val bildArticle_headline = documentAsDoc >> element("article header h1 .headline") >> text
             val bildArticle_subhead = documentAsDoc >> element("article header .subhead") >> text
-
             val articleText = documentAsDoc >> elementList("article .txt p")
 
+            /**
+              * Concatenate all the text-parts to a single String
+              */
             val textAsList = articleText.map(textPart => {
               textPart >> text
             })
-
             val bildArticle_text = textAsList.mkString(" ")
 
+            /**
+              * Build a List of Crossheadings from the HTML document
+              */
             val articleCrossheadings = documentAsDoc >> elementList("article .txt .crossheading")
-
             val bildArticle_crossheadings = articleCrossheadings.map(crossheading => {
               crossheading >> text
             })
 
+            /**
+              * Searching for the pageTracking JavaScript Object with informations about the subChannels and IDs
+              */
             val cmsDataPageTrackingRegex: Regex = "de.bild.cmsData.pageTracking[\\s\\S]*?(?=;)".r
-
             val cmsDataPageTracking = cmsDataPageTrackingRegex.findFirstIn(document)
-
             val fields : Map[String, JsValue] = cmsDataPageTracking match {
               case Some(cmsDataPageTrackingString) =>
                 val jsonFromString = cmsDataPageTrackingString.replace("de.bild.cmsData.pageTracking = ", "").parseJson
@@ -83,10 +90,12 @@ class Filter extends Actor {
               text = bildArticle_text,
               crosshaedings = bildArticle_crossheadings,
               documentid = bildArticle_documentid,
-              keywords = bildArticle_keywords
+              keywords = bildArticle_keywords,
+              crawlerTime = crawlerTime
             )
 
             logger.info(s"$bildArticle")
+            crawler ! bildArticle
 
           } catch {
             case e : Exception => logger.error(s"Error while parsing HTML: $e")

@@ -12,6 +12,10 @@ object Dependencies {
   lazy val akkaCluster = "com.typesafe.akka" %% "akka-cluster" % versions.akkaCluster
   lazy val akkaRemote = "com.typesafe.akka" %% "akka-remote" % versions.akkaRemote
 
+  // Kafka
+  lazy val kafka = "org.apache.kafka" %% "kafka" % versions.kafka
+  lazy val kafkaClients = "org.apache.kafka" % "kafka-clients" % versions.kafka
+
   // Scala Test
   lazy val scalaTest = "org.scalatest" %% "scalatest" % versions.scalaTest
   lazy val scalactic = "org.scalactic" %% "scalactic" % versions.scalactic
@@ -52,6 +56,7 @@ object Dependencies {
     val scalaScraper = "2.1.0"
     val joda = "2.10"
     val sprayJson = "1.3.4"
+    val kafka = "2.0.0"
   }
 
 }

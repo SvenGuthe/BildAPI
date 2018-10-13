@@ -1,28 +1,50 @@
 package de.svenguthe.bildapi.crawler
 
-import java.util.Properties
+import java.util.{Properties, UUID}
 
 import akka.actor.Actor
+import com.typesafe.config.ConfigFactory
 import de.svenguthe.bildapi.commons.datatypes.BildArticle
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.slf4j.LoggerFactory
 
-object KafkaProducer {
+object KafkaProducerActor {
 
-  val  props = new Properties()
-  props.put("bootstrap.servers", "localhost:9092")
-  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  /**
+    * Factories to load the typesafe-configuration
+    */
+  private lazy val logger = LoggerFactory.getLogger(this.getClass)
+  private lazy val conf = ConfigFactory.load()
 
-  val producer = new KafkaProducer[String, String](props)
+  private lazy val success = conf.getString("kafka.topics.success")
+
+  private lazy val bootstrapServers = s"${conf.getString("kafka.bootstrap.servers.hostname")}:${conf.getInt("kafka.bootstrap.servers.port")}"
+
+  private val props = new Properties()
+  props.put("bootstrap.servers", bootstrapServers)
+  props.put("key.serializer", conf.getString("kafka.serializers.key.keySerializer"))
+  props.put("value.serializer", conf.getString("kafka.serializers.value.valueSerializer"))
+
+  private lazy val producerSuccessful = new KafkaProducer[String, BildArticle](props)
+
+  logger.info(s"Kafka Producer Settings: $producerSuccessful")
 
 }
 
-class KafkaProducer extends Actor {
+class KafkaProducerActor extends Actor {
+
+  /**
+    * Factories to load the logger
+    */
+  private lazy val logger = LoggerFactory.getLogger(this.getClass)
 
   override def receive: Receive = {
     case bildArticle: BildArticle =>
-
+      val record = new ProducerRecord(KafkaProducerActor.success, UUID.randomUUID().toString, bildArticle)
+      logger.info("KafkaProducer sends BildArticle to Kafka")
+      KafkaProducerActor.producerSuccessful.send(record)
     case None =>
-
+      logger.error("KafkaProducer received no BildArticle")
   }
 
 }

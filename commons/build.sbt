@@ -1,3 +1,4 @@
 libraryDependencies ++= Seq(
-  Dependencies.joda
+  Dependencies.joda,
+  Dependencies.kafka
 )

@@ -31,7 +31,7 @@ class Downloader extends Actor {
           try {
             val doc = browser.get(url).toHtml.toString
             logger.info(s"Send document to actor at ${Downloader.destinationActor}")
-            actorSelection ! ("Document", url, doc, pubDate)
+            actorSelection ! ("Document", url, doc, pubDate, DateTime.now())
           } catch {
             case httpStatusException : HttpStatusException =>
               logger.error(s"HTTP-Error while establish HTTP Connection to ${httpStatusException.getUrl} " +

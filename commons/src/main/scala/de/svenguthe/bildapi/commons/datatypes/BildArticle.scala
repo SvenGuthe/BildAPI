@@ -15,5 +15,6 @@ case class BildArticle(
                       var text : String = "",
                       var crosshaedings : List[String] = List(),
                       var documentid : String = "",
-                      var keywords : List[String] = List()
+                      var keywords : List[String] = List(),
+                      var crawlerTime : DateTime
                       )

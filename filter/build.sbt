@@ -3,5 +3,7 @@ libraryDependencies ++= Seq(
   Dependencies.akkaCluster,
   Dependencies.scalaScraper,
   Dependencies.akkaRemote,
-  Dependencies.sprayJson
+  Dependencies.sprayJson,
+  Dependencies.kafka,
+  Dependencies.kafkaClients
 )
