@@ -5,24 +5,39 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
     ports:
-      - "6379:6379"
+      - 6379:6379
     networks:
       - redis-net
     volumes:
       - redis-data:/data
 
-  redis-gui:
-    image: marian/rebrow
-    hostname: redis-gui
+  zookeeper:
+    image: wurstmeister/zookeeper
     ports:
-      - "5001:5001"
+      - 2181:2181
     networks:
-      - redis-net
-    depends_on:
-      - redis
+      - wurstmeister
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - 9092:9092
+      - 9094:9094
+    networks:
+      - wurstmeister
+    environment:
+      KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092,EXTERNAL_PLAINTEXT://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092,EXTERNAL_PLAINTEXT://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_PLAINTEXT
+      AUTO_CREATE_TOPICS: "true"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock
 
 networks:
   redis-net:
+  wurstmeister:
 
 volumes:
   redis-data:

@@ -1,0 +1,51 @@
+version: '3'
+services:
+  redis-gui:
+    image: marian/rebrow
+    hostname: redis-gui
+    ports:
+      - 5001:5001
+    networks:
+      - redis-net
+    depends_on:
+      - redis
+
+  kafka-rest:
+    image: nodefluent/kafka-rest
+    ports:
+      - 8082:8082
+    networks:
+      - wurstmeister
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      DEBUG: "*"
+
+  kafka-rest-ui:
+    image: nodefluent/kafka-rest-ui
+    ports:
+      - 8000:8000
+    networks:
+      - wurstmeister
+    depends_on:
+      - kafka-rest
+    environment:
+      DEBUG: "*"
+      REACT_APP_KAFKA_REST_URL: "http://kafka-rest:8082/"
+      REACT_APP_TIMEOUT: "3000"
+      PROXY: "yes"
+      BASIC_AUTH_USER: "admin"
+      BASIC_AUTH_PASSWORD: "admin"
+
+  portainer:
+    image: portainer/portainer
+    ports:
+      - 9000:9000
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
