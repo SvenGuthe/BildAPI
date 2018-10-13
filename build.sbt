@@ -91,14 +91,6 @@ lazy val filter = project
     commonSettings: _*
   )
 
-lazy val storer = project
-  .dependsOn(
-    commons
-  )
-  .settings(
-    commonSettings: _*
-  )
-
 lazy val visualizer = project
   .dependsOn(
     commons

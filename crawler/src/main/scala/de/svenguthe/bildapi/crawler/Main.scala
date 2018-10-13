@@ -27,7 +27,7 @@ object Main extends App {
     * Initialize the Actor System and define the [[Crawler]]
     */
   val actorSystem = ActorSystem(confActorSystem, crawlerSystem)
-  val urlFetcherActor = actorSystem.actorOf(Props[Crawler], crawlerConfig)
+  val crawlerActor = actorSystem.actorOf(Props[Crawler], crawlerConfig)
 
   import actorSystem.dispatcher
 
@@ -37,7 +37,7 @@ object Main extends App {
   val schedule = actorSystem.scheduler.schedule(
     0 milliseconds,
     10 minutes,
-    urlFetcherActor,
+    crawlerActor,
     "startCrawling")
 
 }

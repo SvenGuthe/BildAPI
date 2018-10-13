@@ -1,6 +1,7 @@
 package de.svenguthe.bildapi.crawler
 
 import akka.actor.Actor
+import com.typesafe.config.ConfigFactory
 import net.ruippeixotog.scalascraper.browser.JsoupBrowser
 import org.joda.time.DateTime
 import org.jsoup.HttpStatusException
@@ -8,7 +9,8 @@ import org.slf4j.LoggerFactory
 
 object Downloader {
 
-  private lazy val destinationActor = "akka.tcp://FilterActorSystem@127.0.0.1:2553/user/Filter"
+  private lazy val conf = ConfigFactory.load()
+  private lazy val destinationActor = conf.getString("filter.actor.address")
 
 }
 
