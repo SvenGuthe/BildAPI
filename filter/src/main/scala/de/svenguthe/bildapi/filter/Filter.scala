@@ -1,4 +1,4 @@
-package de.svenguthe.bildapi.crawler
+package de.svenguthe.bildapi.filter
 
 import akka.actor.{Actor, Props}
 import de.svenguthe.bildapi.commons.datatypes.BildArticle

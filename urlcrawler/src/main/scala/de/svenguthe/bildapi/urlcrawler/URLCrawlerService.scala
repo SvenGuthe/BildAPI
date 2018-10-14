@@ -21,6 +21,31 @@ object URLCrawlerService {
   private lazy val conf = ConfigFactory.load()
 
   private lazy val politicsPre = conf.getString("urls.politics.pre")
+  private lazy val newsPre = conf.getString("urls.news.pre")
+  private lazy val geldPre = conf.getString("urls.geld.pre")
+  private lazy val unterhaltungPre = conf.getString("urls.unterhaltung.pre")
+  private lazy val sportPre = conf.getString("urls.sport.pre")
+  private lazy val lifestylePre = conf.getString("urls.lifestyle.pre")
+  private lazy val ratgeberPre = conf.getString("urls.ratgeber.pre")
+  private lazy val reisePre = conf.getString("urls.reise.pre")
+  private lazy val autoPre = conf.getString("urls.auto.pre")
+  private lazy val digitalPre = conf.getString("urls.digital.pre")
+  private lazy val spielePre = conf.getString("urls.spiele.pre")
+  private lazy val regionalPre = conf.getString("urls.regional.pre")
+
+  private lazy val listPre = List(politicsPre,
+    newsPre,
+    geldPre,
+    unterhaltungPre,
+    sportPre,
+    lifestylePre,
+    ratgeberPre,
+    reisePre,
+    autoPre,
+    digitalPre,
+    spielePre,
+    regionalPre)
+
   private lazy val bildPre = conf.getString("urls.bild.pre")
 
   /** Get all links from an website and send all the articles with pubdate < 7 days ago back to the sender
@@ -40,9 +65,9 @@ object URLCrawlerService {
           val href = link.attr("href")
 
           /**
-            * Check if the href attribute is a link from the politics section
+            * Check if the href attribute is a link
             */
-          if (href.startsWith(politicsPre)) {
+          if (listPre.exists(pre => href.startsWith(pre))) {
 
             val url = s"$bildPre$href"
 

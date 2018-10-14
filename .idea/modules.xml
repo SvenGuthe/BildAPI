@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/analyzer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/analyzer-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/api.iml" filepath="$PROJECT_DIR$/.idea/modules/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-build.iml" filepath="$PROJECT_DIR$/.idea/modules/api-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cassandra_interface.iml" filepath="$PROJECT_DIR$/.idea/modules/cassandra_interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cassandra_interface-build.iml" filepath="$PROJECT_DIR$/.idea/modules/cassandra_interface-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleaner.iml" filepath="$PROJECT_DIR$/.idea/modules/cleaner.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cleaner-build.iml" filepath="$PROJECT_DIR$/.idea/modules/cleaner-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/commons.iml" filepath="$PROJECT_DIR$/.idea/modules/commons.iml" />

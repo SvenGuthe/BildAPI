@@ -16,6 +16,9 @@ object Dependencies {
   lazy val kafka = "org.apache.kafka" %% "kafka" % versions.kafka
   lazy val kafkaClients = "org.apache.kafka" % "kafka-clients" % versions.kafka
 
+  // Cassandra
+  lazy val cassandraCore = "com.datastax.cassandra" % "cassandra-driver-core" % versions.cassandraCore
+
   // Scala Test
   lazy val scalaTest = "org.scalatest" %% "scalatest" % versions.scalaTest
   lazy val scalactic = "org.scalactic" %% "scalactic" % versions.scalactic
@@ -57,6 +60,7 @@ object Dependencies {
     val joda = "2.10"
     val sprayJson = "1.3.4"
     val kafka = "2.0.0"
+    val cassandraCore = "3.6.0"
   }
 
 }

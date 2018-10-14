@@ -1,0 +1,3 @@
+libraryDependencies += {
+  Dependencies.cassandraCore
+}

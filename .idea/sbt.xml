@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$/analyzer/project" />
             <option value="$PROJECT_DIR$/api" />
             <option value="$PROJECT_DIR$/api/project" />
+            <option value="$PROJECT_DIR$/cassandra_interface" />
+            <option value="$PROJECT_DIR$/cassandra_interface/project" />
             <option value="$PROJECT_DIR$/cleaner" />
             <option value="$PROJECT_DIR$/cleaner/project" />
             <option value="$PROJECT_DIR$/commons" />

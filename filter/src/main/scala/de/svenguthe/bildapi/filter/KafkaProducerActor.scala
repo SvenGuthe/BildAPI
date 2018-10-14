@@ -1,4 +1,4 @@
-package de.svenguthe.bildapi.crawler
+package de.svenguthe.bildapi.filter
 
 import java.util.{Properties, UUID}
 

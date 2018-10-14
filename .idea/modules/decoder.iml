@@ -15,6 +15,26 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="commons" exported="" />
+    <orderEntry type="library" name="sbt: org.ow2.asm:asm-util:5.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.ow2.asm:asm-tree:5.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.ow2.asm:asm-commons:5.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.ow2.asm:asm-analysis:5.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.ow2.asm:asm:5.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.netty:netty-transport:4.0.56.Final:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.netty:netty-handler:4.0.56.Final:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.netty:netty-common:4.0.56.Final:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.netty:netty-codec:4.0.56.Final:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.netty:netty-buffer:4.0.56.Final:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.dropwizard.metrics:metrics-core:3.2.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.google.guava:guava:19.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jnr-x86asm:1.0.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jnr-posix:3.0.44:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jnr-ffi:2.1.7:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jnr-constants:0.9.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jffi:1.2.16:native:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.jnr:jffi:1.2.16:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.datastax.cassandra:cassandra-driver-core:3.6.0:jar" level="project" />
+    <orderEntry type="module" module-name="cassandra_interface" exported="" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-parser-combinators_2.12:1.1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-java8-compat_2.12:0.8.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.reactivestreams:reactive-streams:1.0.2:jar" level="project" />

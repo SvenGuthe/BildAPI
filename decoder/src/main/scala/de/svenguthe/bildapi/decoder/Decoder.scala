@@ -59,6 +59,7 @@ class Decoder extends Actor {
       message match {
         case "startConsuming" =>
           logger.info("Start consuming Messages from Kafka")
+          Decoder.consumerSuccessful.wakeup()
           Decoder.consumerSuccessful.subscribe(util.Collections.singletonList(Decoder.success))
 
           val records = Decoder.consumerSuccessful.poll(Decoder.duration).asScala

@@ -32,6 +32,14 @@ lazy val redis_interface = project
     global
   )
 
+lazy val cassandra_interface = project
+  .settings(
+    commonSettings: _*
+  )
+  .dependsOn(
+    global
+  )
+
 lazy val urlcrawler = project
   .dependsOn(
     commons,
@@ -77,7 +85,8 @@ lazy val crawler = project
 
 lazy val decoder = project
   .dependsOn(
-    commons
+    commons,
+    cassandra_interface
   )
   .settings(
     commonSettings: _*

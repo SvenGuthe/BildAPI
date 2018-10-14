@@ -2,6 +2,7 @@ package de.svenguthe.bildapi.decoder
 
 import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
+import de.svenguthe.bildapi.cassandra_interface.CassandraService
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
@@ -21,6 +22,14 @@ object Main extends App {
   private lazy val confActorSystem = conf.getString("decoderSystem.akka.systemName")
   private lazy val decoderConfig = conf.getString("decoderSystem.akka.actor.actors.decoder")
   private lazy val decoderSystem  = conf.getConfig("decoderSystem")
+
+  /**
+    * Initialize Cassandra
+    */
+  private val cassandraService = CassandraService(conf)
+  private val cassandraSession = cassandraService.getCassandraSession()
+  cassandraService.createKeyspaceIfNotExists(cassandraSession)
+  cassandraService.createRawBildArticlesTable(cassandraSession)
 
   /**
     * Initialize the Actor System and define the [[Decoder]]
