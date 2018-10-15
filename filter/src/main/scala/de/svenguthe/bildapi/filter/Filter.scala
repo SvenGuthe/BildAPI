@@ -70,12 +70,12 @@ class Filter extends Actor {
 
             val bildArticle_url = url
             val bildArticle_pubDate = pubDate
-            val bildArticle_subChannel1 = fields.getOrElse("subChannel1", "").toString
-            val bildArticle_subChannel2 = fields.getOrElse("subChannel2", "").toString
-            val bildArticle_subChannel3 = fields.getOrElse("subChannel3", "").toString
-            val bildArticle_subChannel4 = fields.getOrElse("subChannel4", "").toString
+            val bildArticle_subChannel1 = fields.getOrElse("subChannel1", "").toString.replaceAll("\"", "")
+            val bildArticle_subChannel2 = fields.getOrElse("subChannel2", "").toString.replaceAll("\"", "")
+            val bildArticle_subChannel3 = fields.getOrElse("subChannel3", "").toString.replaceAll("\"", "")
+            val bildArticle_subChannel4 = fields.getOrElse("subChannel4", "").toString.replaceAll("\"", "")
             val bildArticle_documentid = fields.getOrElse("documentId", "").toString
-            val bildArticle_keywords = fields.getOrElse("keywords", "").toString.split(",").toList
+            val bildArticle_keywords = fields.getOrElse("keywords", "").toString.replaceAll("\"", "").split(",").toList
 
             val bildArticle = BildArticle(
               url = bildArticle_url,

@@ -45,7 +45,7 @@ class Crawler extends Actor {
             allKeysFromRedis.get.foreach(url => {
 
               val pubDate = redisConnection.get[String](url.getOrElse("")).getOrElse("")
-              val pubDateJoda = Formatter.formatStringToDateTime(pubDate).withTimeAtStartOfDay()
+              val pubDateJoda = Formatter.formatStringToDateTime(pubDate)
 
               if(pubDateJoda.year.get() == 9999){
                 logger.info(s"Try to crawl no article at ${url.getOrElse("")}")

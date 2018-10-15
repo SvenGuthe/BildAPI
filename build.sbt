@@ -37,7 +37,8 @@ lazy val cassandra_interface = project
     commonSettings: _*
   )
   .dependsOn(
-    global
+    global,
+    commons
   )
 
 lazy val urlcrawler = project

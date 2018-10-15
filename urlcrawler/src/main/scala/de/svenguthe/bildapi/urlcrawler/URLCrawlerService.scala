@@ -9,6 +9,10 @@ import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.model._
 import org.joda.time.{DateTime, Days}
 import org.slf4j.LoggerFactory
+import spray.json.JsValue
+import spray.json._
+
+import scala.util.matching.Regex
 
 /** Object which provide functions to crawl a website */
 object URLCrawlerService {
@@ -25,6 +29,7 @@ object URLCrawlerService {
   private lazy val geldPre = conf.getString("urls.geld.pre")
   private lazy val unterhaltungPre = conf.getString("urls.unterhaltung.pre")
   private lazy val sportPre = conf.getString("urls.sport.pre")
+  private lazy val bundesligaPre = conf.getString("urls.bundesliga.pre")
   private lazy val lifestylePre = conf.getString("urls.lifestyle.pre")
   private lazy val ratgeberPre = conf.getString("urls.ratgeber.pre")
   private lazy val reisePre = conf.getString("urls.reise.pre")
@@ -38,6 +43,7 @@ object URLCrawlerService {
     geldPre,
     unterhaltungPre,
     sportPre,
+    bundesligaPre,
     lifestylePre,
     ratgeberPre,
     reisePre,
@@ -76,19 +82,34 @@ object URLCrawlerService {
               */
             val browser = JsoupBrowser()
             val doc = browser.get(url)
-            var authorpubdate = doc >> elementList(".authors__pubdate")
+
+            val html = doc.toHtml.toString
+            /**
+              * Searching for the pageTracking JavaScript Object with informations about the subChannels and IDs
+              */
+            val cmsDataPageTrackingRegex: Regex = "de.bild.cmsData.pageTracking[\\s\\S]*?(?=;)".r
+            val cmsDataPageTracking = cmsDataPageTrackingRegex.findFirstIn(html)
+            val fields : Map[String, JsValue] = cmsDataPageTracking match {
+              case Some(cmsDataPageTrackingString) =>
+                val jsonFromString = cmsDataPageTrackingString.replace("de.bild.cmsData.pageTracking = ", "").parseJson
+                jsonFromString.asJsObject.fields
+              case None =>
+                logger.info("Nothing Found in Regex")
+                Map[String, JsValue]()
+            }
+
+            val authorpubdate = fields.getOrElse("publicationDate", "").toString
 
             /**
               * If there is an AuthorPubDate it is normally an article
               */
-            if(authorpubdate.nonEmpty) {
-              val pubdate = authorpubdate.head.attr("datetime")
-              val jodatime = Formatter.formatStringToDateTimeCrawler(pubdate).toDate
+            if(authorpubdate != "") {
+              val jodatime = Formatter.formatStringToDateTimeCrawler(authorpubdate).toDate
 
               /**
                 * If the Publishing date is more then 7 days ago, we don't fetch the url
                 */
-              if (Days.daysBetween(Formatter.formatStringToDateTimeCrawler(pubdate).withTimeAtStartOfDay, DateTime.now.withTimeAtStartOfDay).getDays < 7) {
+              if (Days.daysBetween(Formatter.formatStringToDateTimeCrawler(authorpubdate).withTimeAtStartOfDay, DateTime.now.withTimeAtStartOfDay).getDays < 7) {
                 logger.info(s"Publish Page $url with PubTime $jodatime")
                 sender ! ("publishURL", url, jodatime)
               } else {

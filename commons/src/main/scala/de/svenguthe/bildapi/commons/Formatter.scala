@@ -9,7 +9,7 @@ import org.joda.time.format.DateTimeFormat
 
 object Formatter {
 
-  val dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+  val dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
   var dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
 
   def formatStringToDateTime(dateString: String) : DateTime = {
@@ -17,7 +17,7 @@ object Formatter {
   }
 
   def formatStringToDateTimeCrawler(pubdate : String): DateTime ={
-    dtf.parseDateTime(pubdate)
+    dtf.parseDateTime(pubdate.replaceAll("\"", ""))
   }
 
 }
