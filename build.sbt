@@ -4,7 +4,9 @@ name := "BildAPI"
 
 // Multi-Project Settings
 
-lazy val commonSettings = Seq(
+lazy val settingDockerTagNamespace = "svenguthe"
+
+lazy val settingCommonSettings = Seq(
   version := versions.build,
   organization := "de.svenguthe",
   scalaVersion := versions.scala,
@@ -18,7 +20,7 @@ lazy val global = project
 
 lazy val commons = project
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
   .dependsOn(
     global
@@ -26,7 +28,7 @@ lazy val commons = project
 
 lazy val redis_interface = project
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
   .dependsOn(
     global
@@ -34,7 +36,7 @@ lazy val redis_interface = project
 
 lazy val cassandra_interface = project
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
   .dependsOn(
     global,
@@ -47,7 +49,10 @@ lazy val urlcrawler = project
     redis_interface
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings,
+  )
+  .enablePlugins(
+    DockerPlugin
   )
 
 lazy val cleaner = project
@@ -56,7 +61,7 @@ lazy val cleaner = project
     redis_interface
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val analyzer = project
@@ -64,7 +69,7 @@ lazy val analyzer = project
     commons
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val api = project
@@ -72,7 +77,7 @@ lazy val api = project
     commons
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val crawler = project
@@ -81,7 +86,7 @@ lazy val crawler = project
     redis_interface
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val decoder = project
@@ -90,7 +95,7 @@ lazy val decoder = project
     cassandra_interface
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val filter = project
@@ -98,7 +103,7 @@ lazy val filter = project
     commons
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 lazy val visualizer = project
@@ -106,7 +111,7 @@ lazy val visualizer = project
     commons
   )
   .settings(
-    commonSettings: _*
+    settingCommonSettings
   )
 
 // Dependencies
