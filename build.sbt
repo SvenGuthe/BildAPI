@@ -63,6 +63,9 @@ lazy val cleaner = project
   .settings(
     settingCommonSettings
   )
+  .enablePlugins(
+    DockerPlugin
+  )
 
 lazy val analyzer = project
   .dependsOn(
@@ -88,6 +91,9 @@ lazy val crawler = project
   .settings(
     settingCommonSettings
   )
+  .enablePlugins(
+    DockerPlugin
+  )
 
 lazy val decoder = project
   .dependsOn(
@@ -97,6 +103,9 @@ lazy val decoder = project
   .settings(
     settingCommonSettings
   )
+  .enablePlugins(
+    DockerPlugin
+  )
 
 lazy val filter = project
   .dependsOn(
@@ -104,6 +113,9 @@ lazy val filter = project
   )
   .settings(
     settingCommonSettings
+  )
+  .enablePlugins(
+    DockerPlugin
   )
 
 lazy val visualizer = project
