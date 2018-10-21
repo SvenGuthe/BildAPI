@@ -126,6 +126,17 @@ lazy val visualizer = project
     settingCommonSettings
   )
 
+lazy val activitytracker = project
+  .dependsOn(
+    commons
+  )
+  .settings(
+    settingCommonSettings
+  )
+  .enablePlugins(
+    DockerPlugin
+  )
+
 // Dependencies
 
 libraryDependencies ++= Seq(

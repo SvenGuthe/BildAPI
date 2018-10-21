@@ -48,8 +48,8 @@ object PollLoop extends App {
 
   private val props = new Properties()
   props.put("bootstrap.servers", bootstrapServers)
-  props.put("key.deserializer", conf.getString("kafka.deserializers.key.keyDeserializer"))
-  props.put("value.deserializer", conf.getString("kafka.deserializers.value.valueDeserializer"))
+  props.put("key.deserializer", conf.getString("kafka.deserializers.bildarticle.key.keyDeserializer"))
+  props.put("value.deserializer", conf.getString("kafka.deserializers.bildarticle.value.valueDeserializer"))
   props.put("group.id", conf.getString("kafka.group.id.decoder"))
   props.put("auto.offset.reset", conf.getString("kafka.auto.offset.reset"))
   props.put("enable.auto.commit", conf.getString("kafka.enable.auto.commit"))

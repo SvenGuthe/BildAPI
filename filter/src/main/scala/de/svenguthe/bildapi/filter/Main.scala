@@ -24,8 +24,8 @@ object Main extends App {
     * Initialize the Actor System and define the [[Filter]]
     */
   val actorSystem = ActorSystem(confActorSystem, filterSystem)
-  val urlFetcherActor = actorSystem.actorOf(Props[Filter], filterConfig)
+  val filterActor = actorSystem.actorOf(Props[Filter], filterConfig)
 
-  urlFetcherActor ! "Initialize FilterActor"
+  filterActor ! "Initialize FilterActor"
 
 }
