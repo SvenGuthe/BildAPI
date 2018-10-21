@@ -10,14 +10,17 @@ Is searching for new URLs on the Bild Website.
 ## crawler
 Downloads the articles.
 
+![URL Crawer](graphics/Crawler.png)
+
 ## filter
 Checks if the articles from the crawler are bild-articles.
+
+![URL Crawer](graphics/Filter.png)
 
 ## decoder
 Checks the section of the article and decode it in scala-objects.
 
-## storer
-Store the objects to cassandra.
+![URL Crawer](graphics/Decoder.png)
 
 ## cleaner
 Checks the cassandra url list for duplicates and remove them.

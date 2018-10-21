@@ -1,10 +1,6 @@
 # Structure of Bild Articles / Links
 
-To start easily, we will only cover politics news.
-
 ## Start Page
-The URL of Bild politics section is [https://www.bild.de/politik/startseite].
-
 Articles are in div-containers with the following hierarchy.
 
 ```
@@ -18,7 +14,6 @@ Articles are in div-containers with the following hierarchy.
 ```
 
 ## Article Page
-
 The content of the article pages are in the following hierarchy of div-containers
 
 ```
