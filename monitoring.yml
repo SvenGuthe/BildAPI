@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  shiny:
+    image: rocker/shiny
+    restart: always
+    user: 'root'
+    ports:
+      - '80:3838'
+    volumes:
+      - shiny_logs:/var/log/shiny-server
+      # Comment the line below out for initial testing. With it commented out,
+      # going to localhost:80 in one's web browser will show a "Welcome to
+      # Shiny Server!" diagnostics page.
+      # - ./activitydashboard:/srv/shiny-server/activitydashboard
+
+volumes:
+  shiny_logs:
