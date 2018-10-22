@@ -3,6 +3,7 @@ import Docker.buildOptions
 libraryDependencies ++= Seq(
   Dependencies.akkaActor,
   Dependencies.akkaCluster,
+  Dependencies.akkaRemote,
   Dependencies.scalaScraper,
   Dependencies.sprayJson
 )

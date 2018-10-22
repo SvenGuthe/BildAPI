@@ -15,8 +15,9 @@ object Main extends App {
   lazy val logger = LoggerFactory.getLogger(this.getClass)
   lazy val conf = ConfigFactory.load()
 
-  lazy val confActorSystem = conf.getString("akka.akkaSystem")
-  lazy val outdatedURLFetcherConfig = conf.getString("akka.actors.outdatedURLFetcher")
+  lazy val confActorSystem = conf.getString("cleanerSystem.akka.systemName")
+  lazy val outdatedURLFetcherConfig = conf.getString("cleanerSystem.akka.actor.actors.outdatedURLFetcher")
+  lazy val cleanerSystem  = conf.getConfig("cleanerSystem")
 
   logger.info(s"===============================")
   logger.info(s"======= Starting Cleaner ======")
@@ -25,7 +26,7 @@ object Main extends App {
   /**
     * Initialize the Actor System and define the [[OutdatedURLFetcher]]
     */
-  val actorSystem = ActorSystem(confActorSystem)
+  val actorSystem = ActorSystem(confActorSystem, cleanerSystem)
   val outdatedURLFetcherActor = actorSystem.actorOf(Props[OutdatedURLFetcher], outdatedURLFetcherConfig)
 
   import actorSystem.dispatcher

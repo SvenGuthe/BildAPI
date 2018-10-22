@@ -41,7 +41,7 @@ class KafkaProducerActor extends Actor {
   override def receive: Receive = {
     case healthcheckMessage: HealthcheckMessage =>
       val record = new ProducerRecord(KafkaProducerActor.healthcheckmessages, UUID.randomUUID().toString, healthcheckMessage)
-      logger.info("KafkaProducer sends Healthcheckmessage to Kafka")
+      logger.info(s"KafkaProducer sends Healthcheckmessage to Kafka: $healthcheckMessage")
       KafkaProducerActor.producerHealthcheckmessage.send(record)
     case initialMessage : String if initialMessage == "Initialize ActivityTracker Actor" =>
       logger.info("KafkaProducerActor initialized successful")

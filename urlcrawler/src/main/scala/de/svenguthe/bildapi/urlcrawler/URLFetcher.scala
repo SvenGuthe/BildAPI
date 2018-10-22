@@ -5,11 +5,12 @@ import java.util.Date
 import akka.actor.{Actor, Props}
 import com.redis.RedisClient
 import com.typesafe.config.ConfigFactory
+import de.svenguthe.bildapi.commons.datatypes.{ActivityActorMessages, Actors, HealthcheckMessage, MessageStatus}
 import de.svenguthe.bildapi.redisinterface.RedisService
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 
-import scala.collection.mutable.HashMap
+import scala.collection.mutable
 
 object URLFetcher {
 
@@ -19,33 +20,23 @@ object URLFetcher {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val politicsStartseite = conf.getString("urls.politics.startseite")
-  private lazy val newsStartseite = conf.getString("urls.news.startseite")
-  private lazy val geldStartseite = conf.getString("urls.geld.startseite")
-  private lazy val unterhaltungStartseite = conf.getString("urls.unterhaltung.startseite")
-  private lazy val sportStartseite = conf.getString("urls.sport.startseite")
-  private lazy val bundesligaStartseite = conf.getString("urls.bundesliga.startseite")
-  private lazy val lifestyleStartseite = conf.getString("urls.lifestyle.startseite")
-  private lazy val ratgeberStartseite = conf.getString("urls.ratgeber.startseite")
-  private lazy val reiseStartseite = conf.getString("urls.reise.startseite")
-  private lazy val autoStartseite = conf.getString("urls.auto.startseite")
-  private lazy val digitalStartseite = conf.getString("urls.digital.startseite")
-  private lazy val spieleStartseite = conf.getString("urls.spiele.startseite")
-  private lazy val regionalStartseite = conf.getString("urls.regional.startseite")
-  
-  val startpages = List(politicsStartseite,
-    newsStartseite,
-    geldStartseite,
-    unterhaltungStartseite,
-    sportStartseite,
-    bundesligaStartseite,
-    lifestyleStartseite,
-    ratgeberStartseite,
-    reiseStartseite,
-    autoStartseite,
-    digitalStartseite,
-    spieleStartseite,
-    regionalStartseite)
+  private lazy val startpages = List(conf.getString("urls.politics.startseite"),
+    conf.getString("urls.news.startseite"),
+    conf.getString("urls.geld.startseite"),
+    conf.getString("urls.unterhaltung.startseite"),
+    conf.getString("urls.sport.startseite"),
+    conf.getString("urls.bundesliga.startseite"),
+    conf.getString("urls.lifestyle.startseite"),
+    conf.getString("urls.ratgeber.startseite"),
+    conf.getString("urls.reise.startseite"),
+    conf.getString("urls.auto.startseite"),
+    conf.getString("urls.digital.startseite"),
+    conf.getString("urls.spiele.startseite"),
+    conf.getString("urls.regional.startseite"))
+
+  private lazy val crawlerConfig = conf.getString("uRLCrawlerActorSystem.akka.actor.actors.urlCrawler")
+  private lazy val activityTrackerConfig = conf.getString("activitytracker.actor.address")
+  private lazy val className = this.getClass.getCanonicalName
 
 }
 
@@ -55,33 +46,49 @@ object URLFetcher {
 class URLFetcher extends Actor {
 
   /**
-    * Factories to load the logger and the typesafe-configuration
+    * Factories to load the logger
     */
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
-  private lazy val conf = ConfigFactory.load()
-
-  private lazy val crawlerConfig = conf.getString("akka.actors.urlCrawler")
 
 
   /**
-    * Define the [[URLCrawler]]-Actor
+    * Define the [[URLCrawler]]-Actor and the ActivityTracker Remote Actor
     */
-  private lazy val crawler = context.actorOf(Props[URLCrawler], crawlerConfig)
+  private lazy val crawler = context.actorOf(Props[URLCrawler], URLFetcher.crawlerConfig)
+  private val actorSelection = context.actorSelection(URLFetcher.activityTrackerConfig)
 
   /**
     * Establish a redis database connection at the first time it is called
     */
   private lazy val redisConnection = RedisService.getRedisConnection()
 
-  private lazy val urlHashMap = HashMap[String, Date]()
+  private lazy val urlHashMap = mutable.HashMap[String, Date]()
 
   override def receive: Receive = {
     case msg: String =>
       msg match {
         case "initalizeFetching" =>
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.URLCrawler,
+            URLFetcher.className,
+            MessageStatus.OK,
+            ActivityActorMessages.LOG,
+            value = msg,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
           redisURLToCrawler(redisConnection)
         case wrongIdentifier =>
           logger.error(s"URLFetcher received message with wrong identifier String: $wrongIdentifier")
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.URLCrawler,
+            URLFetcher.className,
+            MessageStatus.FAILURE,
+            ActivityActorMessages.WRONGIDENTIFIER,
+            value = wrongIdentifier,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
       }
     case (msg : String, url : String, date: Date) =>
       msg match {
@@ -92,15 +99,51 @@ class URLFetcher extends Actor {
             case None =>
               logger.info(s"Set key $url")
               redisConnection.set(url, date)
+              val healthcheckMessage = HealthcheckMessage(
+                Actors.URLCrawler,
+                URLFetcher.className,
+                MessageStatus.OK,
+                ActivityActorMessages.INSERTED,
+                value = url,
+                timestamp = DateTime.now()
+              )
+              actorSelection ! healthcheckMessage
           }
         case "failure" =>
           logger.info(s"Delete key $url")
           redisConnection.del(url)
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.URLCrawler,
+            URLFetcher.className,
+            MessageStatus.OK,
+            ActivityActorMessages.DELETED,
+            value = url,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
         case wrongIdentifier =>
           logger.error(s"URLFetcher received message with wrong identifier String: $wrongIdentifier and URL: $url")
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.CLEANER,
+            URLFetcher.className,
+            MessageStatus.FAILURE,
+            ActivityActorMessages.WRONGIDENTIFIER,
+            value = wrongIdentifier,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
       }
     case wrongFormat =>
       logger.error(s"URLFetcher received wrong message type: $wrongFormat")
+      val healthcheckMessage = HealthcheckMessage(
+        Actors.CLEANER,
+        URLFetcher.className,
+        MessageStatus.FAILURE,
+        ActivityActorMessages.WRONGFORMAT,
+        value = wrongFormat,
+        timestamp = DateTime.now()
+      )
+      actorSelection ! healthcheckMessage
   }
 
   def redisURLToCrawler(redisConnection : RedisClient): Unit ={
@@ -116,7 +159,6 @@ class URLFetcher extends Actor {
         map.foreach(
           url => {
             urlHashMap.put(url.getOrElse(""), DateTime.now().toDate)
-            // crawler ! (url.getOrElse(""), DateTime.now().toDate)
           }
         )
       case None =>
