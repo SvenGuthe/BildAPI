@@ -1,4 +1,4 @@
-package de.svenguthe.bildapi.decoder
+package de.svenguthe.bildapi.decoderba
 
 import akka.actor.Actor
 import com.datastax.driver.core.Session

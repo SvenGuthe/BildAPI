@@ -1,4 +1,4 @@
-package de.svenguthe.bildapi.decoder
+package de.svenguthe.bildapi.decoderba
 
 import java.time.Duration
 import java.util.Properties
@@ -13,7 +13,7 @@ import java.util
 
 import org.joda.time.DateTime
 
-object PollLoop extends App {
+object DecoderBAMain extends App {
 
   /**
     * Factories to load the logger and the typesafe-configuration
@@ -22,12 +22,12 @@ object PollLoop extends App {
   private lazy val conf = ConfigFactory.load()
 
   logger.info(s"===============================")
-  logger.info(s"======= Starting Decoder ======")
+  logger.info(s"===== Starting BA Decoder =====")
   logger.info(s"===============================")
 
-  private lazy val confActorSystem = conf.getString("decoderSystem.akka.systemName")
-  private lazy val storingConfig = conf.getString("decoderSystem.akka.actor.actors.storingUnit")
-  private lazy val decoderSystem  = conf.getConfig("decoderSystem")
+  private lazy val confActorSystem = conf.getString("decoderBASystem.akka.systemName")
+  private lazy val storingConfig = conf.getString("decoderBASystem.akka.actor.actors.storingUnit")
+  private lazy val decoderSystem  = conf.getConfig("decoderBASystem")
 
   /**
     * Initialize Cassandra
@@ -74,7 +74,7 @@ object PollLoop extends App {
         logger.info(s"Consume Bild article from kafka: $bildArticle")
         storingActor ! (bildArticle, cassandraSession)
         val healthcheckMessage = HealthcheckMessage(
-          Actors.DECODER,
+          Actors.DECODERBA,
           className,
           MessageStatus.OK,
           ActivityActorMessages.INSERTED,
@@ -88,7 +88,7 @@ object PollLoop extends App {
   }
   finally {
     val healthcheckMessage = HealthcheckMessage(
-      Actors.DECODER,
+      Actors.DECODERBA,
       className,
       MessageStatus.FAILURE,
       ActivityActorMessages.CLOSED,

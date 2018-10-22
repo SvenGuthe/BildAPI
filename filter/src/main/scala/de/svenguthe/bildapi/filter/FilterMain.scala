@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import org.slf4j.LoggerFactory
 
-object Main extends App {
+object FilterMain extends App {
 
   /**
     * Factories to load the logger and the typesafe-configuration

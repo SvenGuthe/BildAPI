@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /** Main Object witch extends App and triggers the cleaning process of the redis database */
-object Main extends App {
+object CleanerMain extends App {
 
   /**
     * Factories to load the logger and the typesafe-configuration
