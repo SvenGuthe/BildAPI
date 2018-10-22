@@ -6,11 +6,12 @@ import java.util.Properties
 import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import de.svenguthe.bildapi.cassandra_interface.CassandraService
-import de.svenguthe.bildapi.commons.datatypes.BildArticle
+import de.svenguthe.bildapi.commons.datatypes._
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.LoggerFactory
 import java.util
 
+import org.joda.time.DateTime
 
 object PollLoop extends App {
 
@@ -39,8 +40,12 @@ object PollLoop extends App {
   /**
     * Initialize the Actor System and define the [[StoringUnit]]
     */
-  val actorSystem = ActorSystem(confActorSystem, decoderSystem)
-  val storingActor = actorSystem.actorOf(Props[StoringUnit], storingConfig)
+  private lazy val actorSystem = ActorSystem(confActorSystem, decoderSystem)
+  private lazy val storingActor = actorSystem.actorOf(Props[StoringUnit], storingConfig)
+
+  private lazy val className = this.getClass.getCanonicalName
+  private lazy val activityTrackerConfig = conf.getString("activitytracker.actor.address")
+  private lazy val activityTrackerActor = actorSystem.actorSelection(activityTrackerConfig)
 
   private lazy val success = conf.getString("kafka.topics.success")
 
@@ -68,11 +73,28 @@ object PollLoop extends App {
         val bildArticle = recods.value()
         logger.info(s"Consume Bild article from kafka: $bildArticle")
         storingActor ! (bildArticle, cassandraSession)
+        val healthcheckMessage = HealthcheckMessage(
+          Actors.DECODER,
+          className,
+          MessageStatus.OK,
+          ActivityActorMessages.INSERTED,
+          value = bildArticle.url,
+          timestamp = DateTime.now()
+        )
+        activityTrackerActor ! healthcheckMessage
       })
       consumerSuccessful.commitSync()
     }
   }
   finally {
+    val healthcheckMessage = HealthcheckMessage(
+      Actors.DECODER,
+      className,
+      MessageStatus.FAILURE,
+      ActivityActorMessages.CLOSED,
+      timestamp = DateTime.now()
+    )
+    activityTrackerActor ! healthcheckMessage
     consumerSuccessful.close()
     }
 

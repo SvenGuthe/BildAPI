@@ -6,6 +6,14 @@ object ActivityActorMessages extends Enumeration {
   val DELETED = Value
   val INSERTED = Value
 
+  val CLOSED = Value
+
+  val PARSED = Value
+
+  val FORWARDED = Value
+
+  val HTTPREQUEST = Value
+
   val WRONGFORMAT = Value
   val WRONGIDENTIFIER = Value
 
