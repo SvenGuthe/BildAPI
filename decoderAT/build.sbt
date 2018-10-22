@@ -25,7 +25,7 @@ dockerfile in docker := {
 imageNames in docker := Seq(
   ImageName(
     namespace = Option(buildOptions.dockerTagNamespace),
-    repository = buildOptions.dockerImageNameDecoder,
+    repository = buildOptions.dockerImageNameDecoderAT,
     tag = Option(buildOptions.dockerVersion)
   )
 )

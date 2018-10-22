@@ -1,10 +1,12 @@
 package de.svenguthe.bildapi.cassandra_interface
 
+import java.util.UUID
+
 import com.datastax.driver.core.querybuilder.QueryBuilder
 import com.datastax.driver.core.schemabuilder.SchemaBuilder
 import com.datastax.driver.core.{Cluster, DataType, Session}
 import com.typesafe.config.{Config, ConfigFactory}
-import de.svenguthe.bildapi.commons.datatypes.BildArticle
+import de.svenguthe.bildapi.commons.datatypes.{BildArticle, HealthcheckMessage}
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
@@ -38,6 +40,7 @@ case class CassandraService(moduleConfig : Config) {
   def createTable(session : Session,
                   tableName : String,
                   mapAttributes : Map[String, DataType],
+                  clusterKey : Map[String, DataType],
                   primaryKey : Map[String, DataType],
                   keyspaceName : String = keyspaceConf): Unit = {
 
@@ -47,6 +50,10 @@ case class CassandraService(moduleConfig : Config) {
 
     primaryKey.foreach(mapValues => {
       query.addPartitionKey(mapValues._1, mapValues._2)
+    })
+
+    clusterKey.foreach(mapValues => {
+      query.addClusteringColumn(mapValues._1, mapValues._2)
     })
 
     mapAttributes.foreach(mapValues => {
@@ -59,18 +66,47 @@ case class CassandraService(moduleConfig : Config) {
 
   }
 
-  def createRawBildArticlesTable(session : Session): Unit = {
+  def createHealthcheckMessagesTable(session : Session) : Unit = {
 
     val partitionKey = Map[String, DataType](
-      ("documentid", DataType.text()),
-      ("crawlerTime", DataType.timestamp())
+      ("uuid", DataType.uuid())
+    )
+
+    val clusterKey = Map[String, DataType](
+      ("module", DataType.text()),
+      ("status", DataType.text()),
+      ("timestamp", DataType.timestamp())
     )
 
     val attributes = Map[String, DataType](
-      ("url", DataType.text()),
-      ("pubDate", DataType.timestamp()),
+      ("classname", DataType.text()),
+      ("action", DataType.text()),
+      ("value", DataType.text())
+    )
+
+    createTable(session,
+      tables.getString("healthcheckMessages.name"),
+      attributes,
+      clusterKey,
+      partitionKey)
+
+  }
+
+  def createRawBildArticlesTable(session : Session): Unit = {
+
+    val partitionKey = Map[String, DataType](
+      ("uuid", DataType.uuid())
+    )
+
+    val clusterKey = Map[String, DataType](
       ("subChannel1", DataType.text()),
       ("subChannel2", DataType.text()),
+      ("url", DataType.text()),
+      ("pubDate", DataType.timestamp()),
+      ("documentid", DataType.text())
+    )
+
+    val attributes = Map[String, DataType](
       ("subChannel3", DataType.text()),
       ("subChannel4", DataType.text()),
       ("kicker", DataType.text()),
@@ -78,12 +114,34 @@ case class CassandraService(moduleConfig : Config) {
       ("subhead", DataType.text()),
       ("text", DataType.text()),
       ("crossheadings", DataType.list(DataType.text())),
-      ("keywords", DataType.list(DataType.text()))
+      ("keywords", DataType.list(DataType.text())),
+      ("crawlerTime", DataType.timestamp())
     )
+
     createTable(session,
       tables.getString("rawBildArticles.name"),
       attributes,
+      clusterKey,
       partitionKey)
+  }
+
+  def insertHealthcheckmessage(session : Session, healthcheckMessage : HealthcheckMessage) : Unit =  {
+
+    val tableName = tables.getString("healthcheckMessages.name")
+    val insert = QueryBuilder
+      .insertInto(keyspaceConf, tableName)
+      .value("uuid", UUID.randomUUID())
+      .value("module", healthcheckMessage.module.toString)
+      .value("classname", healthcheckMessage.classname.toString)
+      .value("status", healthcheckMessage.status.toString)
+      .value("action", healthcheckMessage.action.toString)
+      .value("value", healthcheckMessage.value.toString)
+      .value("timestamp", healthcheckMessage.timestamp.toString())
+
+    logger.info(s"Query: ${insert.toString}")
+    val result = session.execute(insert.toString)
+    logger.info(s"Result of insertion in table $tableName: $result")
+
   }
 
   def insertBildArticle(session : Session, bildArticle : BildArticle): Unit ={
@@ -91,6 +149,7 @@ case class CassandraService(moduleConfig : Config) {
     val tableName = tables.getString("rawBildArticles.name")
     val insert = QueryBuilder
       .insertInto(keyspaceConf, tableName)
+      .value("uuid", UUID.randomUUID())
       .value("url", bildArticle.url)
       .value("pubDate", bildArticle.pubDate.toString())
       .value("subChannel1", bildArticle.subChannel1)

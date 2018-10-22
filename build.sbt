@@ -95,7 +95,19 @@ lazy val crawler = project
     DockerPlugin
   )
 
-lazy val decoder = project
+lazy val decoderBA = project
+  .dependsOn(
+    commons,
+    cassandra_interface
+  )
+  .settings(
+    settingCommonSettings
+  )
+  .enablePlugins(
+    DockerPlugin
+  )
+
+lazy val decoderAT = project
   .dependsOn(
     commons,
     cassandra_interface

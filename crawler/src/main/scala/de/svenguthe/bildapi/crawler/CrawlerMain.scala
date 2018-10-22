@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
-object Main extends App {
+object CrawlerMain extends App {
 
   /**
     * Factories to load the logger and the typesafe-configuration

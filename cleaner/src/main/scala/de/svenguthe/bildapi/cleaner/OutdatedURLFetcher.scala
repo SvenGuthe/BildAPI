@@ -39,7 +39,7 @@ class OutdatedURLFetcher extends Actor {
   private lazy val redisConnection = RedisService.getRedisConnection()
 
 
-  /** When Receiving new Messages from other actors like [[Main]]
+  /** When Receiving new Messages from other actors like [[CleanerMain]]
     *
     */
   override def receive: Receive = {

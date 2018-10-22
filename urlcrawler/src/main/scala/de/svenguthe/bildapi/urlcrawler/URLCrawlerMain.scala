@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /** Main Object witch extends App and triggers the url crawler */
-object Main extends App {
+object URLCrawlerMain extends App {
 
   /**
     * Factories to load the logger and the typesafe-configuration
