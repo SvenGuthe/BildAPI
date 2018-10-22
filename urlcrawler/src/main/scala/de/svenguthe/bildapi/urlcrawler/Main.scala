@@ -15,8 +15,9 @@ object Main extends App {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val confActorSystem = conf.getString("akka.akkaSystem")
-  private lazy val urlFetcherConfig = conf.getString("akka.actors.urlFetcher")
+  private lazy val confActorSystem = conf.getString("uRLCrawlerActorSystem.akka.systemName")
+  private lazy val urlFetcherConfig = conf.getString("uRLCrawlerActorSystem.akka.actor.actors.urlFetcher")
+  private lazy val urlFetcherSystem  = conf.getConfig("uRLCrawlerActorSystem")
 
   logger.info(s"===============================")
   logger.info(s"===== Starting URLCrawler =====")
@@ -25,7 +26,7 @@ object Main extends App {
   /**
     * Initialize the Actor System and define the [[URLFetcher]]
     */
-  val actorSystem = ActorSystem(confActorSystem)
+  val actorSystem = ActorSystem(confActorSystem, urlFetcherSystem)
   val urlFetcherActor = actorSystem.actorOf(Props[URLFetcher], urlFetcherConfig)
 
   import actorSystem.dispatcher

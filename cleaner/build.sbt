@@ -2,7 +2,8 @@ import Docker.buildOptions
 
 libraryDependencies ++= Seq(
   Dependencies.akkaActor,
-  Dependencies.akkaCluster
+  Dependencies.akkaCluster,
+  Dependencies.akkaRemote
 )
 
 dockerfile in docker := {

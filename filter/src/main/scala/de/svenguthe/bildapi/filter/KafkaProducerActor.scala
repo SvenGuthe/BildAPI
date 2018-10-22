@@ -22,8 +22,8 @@ object KafkaProducerActor {
 
   private val props = new Properties()
   props.put("bootstrap.servers", bootstrapServers)
-  props.put("key.serializer", conf.getString("kafka.serializers.key.keySerializer"))
-  props.put("value.serializer", conf.getString("kafka.serializers.value.valueSerializer"))
+  props.put("key.serializer", conf.getString("kafka.serializers.bildarticle.key.keySerializer"))
+  props.put("value.serializer", conf.getString("kafka.serializers.bildarticle.value.valueSerializer"))
 
   private lazy val producerSuccessful = new KafkaProducer[String, BildArticle](props)
 
@@ -43,7 +43,7 @@ class KafkaProducerActor extends Actor {
       val record = new ProducerRecord(KafkaProducerActor.success, UUID.randomUUID().toString, bildArticle)
       logger.info("KafkaProducer sends BildArticle to Kafka")
       KafkaProducerActor.producerSuccessful.send(record)
-    case None =>
+    case _ =>
       logger.error("KafkaProducer received no BildArticle")
   }
 

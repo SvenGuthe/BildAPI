@@ -3,9 +3,18 @@ package de.svenguthe.bildapi.cleaner
 import akka.actor.{Actor, Props}
 import com.typesafe.config.ConfigFactory
 import de.svenguthe.bildapi.commons.Formatter
+import de.svenguthe.bildapi.commons.datatypes.{ActivityActorMessages, Actors, HealthcheckMessage, MessageStatus}
 import de.svenguthe.bildapi.redisinterface.RedisService
 import org.joda.time.{DateTime, Days}
 import org.slf4j.LoggerFactory
+
+object OutdatedURLFetcher {
+
+  private lazy val conf = ConfigFactory.load()
+  private lazy val activityTrackerConfig = conf.getString("activitytracker.actor.address")
+  private lazy val cleanerConfig = conf.getString("cleanerSystem.akka.actor.actors.cleaner")
+  private lazy val className = this.getClass.getCanonicalName
+}
 
 /** The [[OutdatedURLFetcher]] is an Actor which fetches all entries from redis and test their publishing date
   * if this date was within the last 7 days, nothing will happened
@@ -14,17 +23,15 @@ import org.slf4j.LoggerFactory
 class OutdatedURLFetcher extends Actor {
 
   /**
-    * Factories to load the logger and the typesafe-configuration
+    * Factories to load the logger
     */
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
-  private lazy val conf = ConfigFactory.load()
-
-  private lazy val cleanerConfig = conf.getString("akka.actors.cleaner")
 
   /**
     * Define the [[Cleaner]]-Actor
     */
-  private val cleaner = context.actorOf(Props[Cleaner], cleanerConfig)
+  private val cleaner = context.actorOf(Props[Cleaner], OutdatedURLFetcher.cleanerConfig)
+  private val actorSelection = context.actorSelection(OutdatedURLFetcher.activityTrackerConfig)
 
   /**
     * Establish a redis database connection at the first time it is called
@@ -42,6 +49,15 @@ class OutdatedURLFetcher extends Actor {
     case msg: String =>
       msg match {
         case "startCleaning" =>
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.CLEANER,
+            OutdatedURLFetcher.className,
+            MessageStatus.OK,
+            ActivityActorMessages.LOG,
+            value = msg,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
           sendEntriesToCleaner("*")
 
         /**
@@ -49,6 +65,15 @@ class OutdatedURLFetcher extends Actor {
           */
         case wrongIdentifier =>
           logger.error(s"URLFetcher received message with wrong identifier String: $wrongIdentifier")
+          val healthcheckMessage = HealthcheckMessage(
+            Actors.CLEANER,
+            OutdatedURLFetcher.className,
+            MessageStatus.FAILURE,
+            ActivityActorMessages.WRONGIDENTIFIER,
+            value = wrongIdentifier,
+            timestamp = DateTime.now()
+          )
+          actorSelection ! healthcheckMessage
       }
 
     /**
@@ -56,6 +81,15 @@ class OutdatedURLFetcher extends Actor {
       */
     case wrongFormat =>
       logger.error(s"URLFetcher received wrong message type: $wrongFormat")
+      val healthcheckMessage = HealthcheckMessage(
+        Actors.CLEANER,
+        OutdatedURLFetcher.className,
+        MessageStatus.FAILURE,
+        ActivityActorMessages.WRONGFORMAT,
+        value = wrongFormat,
+        timestamp = DateTime.now()
+      )
+      actorSelection ! healthcheckMessage
   }
 
   /** Fetches all URLs from Redis, check their publishing date and send the url to the [[Cleaner]]-Actor if this date was to long ago

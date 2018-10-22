@@ -4,8 +4,8 @@ libraryDependencies ++= Seq(
   Dependencies.akkaActor,
   Dependencies.akkaCluster,
   Dependencies.akkaRemote,
-  Dependencies.scalaScraper,
-  Dependencies.sprayJson
+  Dependencies.kafka,
+  Dependencies.kafkaClients
 )
 
 dockerfile in docker := {
@@ -22,7 +22,7 @@ dockerfile in docker := {
 imageNames in docker := Seq(
   ImageName(
     namespace = Option(buildOptions.dockerTagNamespace),
-    repository = buildOptions.dockerImageNameUrlcrawler,
+    repository = buildOptions.dockerImageNameAcitivyTracker,
     tag = Option(buildOptions.dockerVersion)
   )
 )

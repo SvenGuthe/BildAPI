@@ -24,33 +24,19 @@ object URLCrawlerService {
   private lazy val logger = LoggerFactory.getLogger(this.getClass)
   private lazy val conf = ConfigFactory.load()
 
-  private lazy val politicsPre = conf.getString("urls.politics.pre")
-  private lazy val newsPre = conf.getString("urls.news.pre")
-  private lazy val geldPre = conf.getString("urls.geld.pre")
-  private lazy val unterhaltungPre = conf.getString("urls.unterhaltung.pre")
-  private lazy val sportPre = conf.getString("urls.sport.pre")
-  private lazy val bundesligaPre = conf.getString("urls.bundesliga.pre")
-  private lazy val lifestylePre = conf.getString("urls.lifestyle.pre")
-  private lazy val ratgeberPre = conf.getString("urls.ratgeber.pre")
-  private lazy val reisePre = conf.getString("urls.reise.pre")
-  private lazy val autoPre = conf.getString("urls.auto.pre")
-  private lazy val digitalPre = conf.getString("urls.digital.pre")
-  private lazy val spielePre = conf.getString("urls.spiele.pre")
-  private lazy val regionalPre = conf.getString("urls.regional.pre")
-
-  private lazy val listPre = List(politicsPre,
-    newsPre,
-    geldPre,
-    unterhaltungPre,
-    sportPre,
-    bundesligaPre,
-    lifestylePre,
-    ratgeberPre,
-    reisePre,
-    autoPre,
-    digitalPre,
-    spielePre,
-    regionalPre)
+  private lazy val listPre = List(conf.getString("urls.politics.pre"),
+    conf.getString("urls.news.pre"),
+    conf.getString("urls.geld.pre"),
+    conf.getString("urls.unterhaltung.pre"),
+    conf.getString("urls.sport.pre"),
+    conf.getString("urls.bundesliga.pre"),
+    conf.getString("urls.lifestyle.pre"),
+    conf.getString("urls.ratgeber.pre"),
+    conf.getString("urls.reise.pre"),
+    conf.getString("urls.auto.pre"),
+    conf.getString("urls.digital.pre"),
+    conf.getString("urls.spiele.pre"),
+    conf.getString("urls.regional.pre"))
 
   private lazy val bildPre = conf.getString("urls.bild.pre")
 
