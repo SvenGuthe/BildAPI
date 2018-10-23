@@ -12,7 +12,7 @@ object RedisService {
   private val conf = ConfigFactory.load()
   private val redisHost = conf.getString("redis.host")
   private val redisPort = conf.getInt("redis.port")
-  private val startpage = conf.getString("urls.politics.startpage")
+  private val startpage = conf.getString("urls.startpage")
 
   def getRedisConnection() : RedisClient = {
     val redisService = new RedisService()

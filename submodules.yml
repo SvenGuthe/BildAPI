@@ -1,0 +1,123 @@
+version: '3'
+services:
+  activitytracker:
+    image: svenguthe/bild-api-activitytracker:0.2
+    ports:
+      - "2555:2555"
+    networks:
+      - activitytracker-net
+    environment:
+      ACTORHOSTNAME: activitytracker
+      ACTORPORTNAME: 2555
+    restart: always
+
+  cleaner:
+    image: svenguthe/bild-api-cleaner:0.2
+    ports:
+      - "2554:2554"
+    depends_on:
+      - redis
+      - activitytracker
+    networks:
+      - redis-net
+    environment:
+      ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
+      ACTORHOSTNAME: cleaner
+      ACTORPORTNAME: 2554
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    restart: always
+
+  urlcrawler:
+    image: svenguthe/bild-api-urlcrawler:0.2
+    ports:
+      - "2556:2556"
+    depends_on:
+      - redis
+      - activitytracker
+    networks:
+      - redis-net
+    environment:
+      ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ACTORHOSTNAME: urlcrawler
+      ACTORPORTNAME: 2556
+    restart: always
+
+  crawler:
+    image: svenguthe/bild-api-crawler:0.2
+    ports:
+      - "2552:2552"
+    depends_on:
+      - filter
+      - activitytracker
+    networks:
+      - redis-net
+      - crawler-net
+    environment:
+      FILTERACTOR: akka.tcp://FilterActorSystem@filter:2553/user/Filter
+      ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
+      ACTORHOSTNAME: crawler
+      ACTORPORTNAME: 2552
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    restart: always
+
+  filter:
+    image: svenguthe/bild-api-filter:0.2
+    ports:
+      - "2553:2553"
+    depends_on:
+      - kafka
+      - activitytracker
+    networks:
+      - crawler-net
+    environment:
+      KAFKAHOST: kafka
+      KAFKAPORT: 9094
+      ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
+      ACTORHOSTNAME: filter
+      ACTORPORTNAME: 2553
+    restart: always
+
+  decoderba:
+    image: svenguthe/bild-api-decoderba:0.2
+    ports:
+      - "2557:2557"
+    depends_on:
+      - kafka
+      - cassandra
+      - activitytracker
+    networks:
+      - cassandra-net
+    environment:
+      KAFKAHOST: kafka
+      KAFKAPORT: 9094
+      ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
+      CASSANDRACONTACTPOINT: cassandra
+      ACTORHOSTNAME: decoderba
+      ACTORPORTNAME: 2557
+    restart: always
+
+  decoderat:
+    image: svenguthe/bild-api-decoderat:0.2
+    ports:
+      - "2558:2558"
+    depends_on:
+      - kafka
+      - cassandra
+      - activitytracker
+    networks:
+      - cassandra-net
+    environment:
+      KAFKAHOST: kafka
+      KAFKAPORT: 9094
+      CASSANDRACONTACTPOINT: cassandra
+      ACTORHOSTNAME: decoderat
+      ACTORPORTNAME: 2558
+    restart: always
+
+networks:
+  crawler-net:
+  activitytracker-net:
