@@ -10,6 +10,7 @@ services:
       - redis-net
     volumes:
       - redis-data:/data
+    restart: always
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -17,6 +18,7 @@ services:
       - "2181:2181"
     networks:
       - wurstmeister-net
+    restart: always
 
   kafka:
     image: wurstmeister/kafka
@@ -25,6 +27,8 @@ services:
       - "9094:9094"
     networks:
       - wurstmeister-net
+    depends_on:
+      - zookeeper
     environment:
       KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092,EXTERNAL_PLAINTEXT://0.0.0.0:9094
       KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092,EXTERNAL_PLAINTEXT://localhost:9094
@@ -34,6 +38,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - //var/run/docker.sock:/var/run/docker.sock
+    restart: always
 
   cassandra:
     image: cassandra
@@ -44,6 +49,7 @@ services:
       - "9160:9160" # thrift clients
     volumes:
       - cassandra-data:/var/lib/cassandra
+    restart: always
 
 networks:
   redis-net:
