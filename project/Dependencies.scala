@@ -43,7 +43,7 @@ object Dependencies {
 
   lazy val versions = new {
     val scala = "2.12.6"
-    val build = "0.2"
+    val build = "0.3"
     val typesafe = "1.3.2"
     val akkaActor = "2.5.16"
     val akkaStream = "2.5.16"
