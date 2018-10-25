@@ -27,6 +27,8 @@ services:
       - "9094:9094"
     networks:
       - wurstmeister-net
+    depends_on:
+      - zookeeper
     environment:
       KAFKA_LISTENERS: INTERNAL_PLAINTEXT://0.0.0.0:9092,EXTERNAL_PLAINTEXT://0.0.0.0:9094
       KAFKA_ADVERTISED_LISTENERS: INTERNAL_PLAINTEXT://kafka:9092,EXTERNAL_PLAINTEXT://localhost:9094

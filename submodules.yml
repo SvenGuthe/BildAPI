@@ -4,9 +4,14 @@ services:
     image: svenguthe/bild-api-activitytracker:0.2
     ports:
       - "2555:2555"
+    depends_on:
+      - kafka
     networks:
       - activitytracker-net
+      - wurstmeister-net
     environment:
+      KAFKAHOST: kafka
+      KAFKAPORT: 9092
       ACTORHOSTNAME: activitytracker
       ACTORPORTNAME: 2555
     restart: always
@@ -19,6 +24,7 @@ services:
       - redis
       - activitytracker
     networks:
+      - activitytracker-net
       - redis-net
     environment:
       ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
@@ -37,6 +43,7 @@ services:
       - activitytracker
     networks:
       - redis-net
+      - activitytracker-net
     environment:
       ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
       REDIS_HOST: redis
@@ -55,6 +62,7 @@ services:
     networks:
       - redis-net
       - crawler-net
+      - activitytracker-net
     environment:
       FILTERACTOR: akka.tcp://FilterActorSystem@filter:2553/user/Filter
       ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
@@ -72,10 +80,12 @@ services:
       - kafka
       - activitytracker
     networks:
+      - wurstmeister-net
       - crawler-net
+      - activitytracker-net
     environment:
       KAFKAHOST: kafka
-      KAFKAPORT: 9094
+      KAFKAPORT: 9092
       ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
       ACTORHOSTNAME: filter
       ACTORPORTNAME: 2553
@@ -91,9 +101,11 @@ services:
       - activitytracker
     networks:
       - cassandra-net
+      - activitytracker-net
+      - wurstmeister-net
     environment:
       KAFKAHOST: kafka
-      KAFKAPORT: 9094
+      KAFKAPORT: 9092
       ACTIVITYTRACKERACTOR: akka.tcp://ActivityTrackerSystem@activitytracker:2555/user/KafkaProducerActor
       CASSANDRACONTACTPOINT: cassandra
       ACTORHOSTNAME: decoderba
@@ -110,9 +122,11 @@ services:
       - activitytracker
     networks:
       - cassandra-net
+      - activitytracker-net
+      - wurstmeister-net
     environment:
       KAFKAHOST: kafka
-      KAFKAPORT: 9094
+      KAFKAPORT: 9092
       CASSANDRACONTACTPOINT: cassandra
       ACTORHOSTNAME: decoderat
       ACTORPORTNAME: 2558
