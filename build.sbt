@@ -149,6 +149,18 @@ lazy val activitytracker = project
     DockerPlugin
   )
 
+lazy val activityanalyzer = project
+  .dependsOn(
+    commons,
+    cassandra_interface
+  )
+  .settings(
+    settingCommonSettings
+  )
+  .enablePlugins(
+    DockerPlugin
+  )
+
 // Dependencies
 
 libraryDependencies ++= Seq(

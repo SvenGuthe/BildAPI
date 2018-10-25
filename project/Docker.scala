@@ -13,6 +13,7 @@ object Docker {
     val dockerImageNameDecoderBA = "bild-api-decoderba"
     val dockerImageNameFilter = "bild-api-filter"
     val dockerImageNameAcitivyTracker = "bild-api-activitytracker"
+    val dockerImageNameAcitivyAnalyzer = "bild-api-activityanalyzer"
   }
 
 }
